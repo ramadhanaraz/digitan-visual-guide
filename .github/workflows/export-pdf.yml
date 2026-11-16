@@ -1,4 +1,4 @@
-name: Build Presentation PDF
+name: Stamp Timestamp & Build PDF
 
 on:
   push:
@@ -9,6 +9,10 @@ on:
 
 permissions:
   contents: write
+
+concurrency:
+  group: build-presentation-pdf
+  cancel-in-progress: false
 
 jobs:
   build-pdf:
@@ -25,10 +29,28 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install chromium --with-deps
 
-      - name: Render 1280x720 PDF
+      - name: Stamp Cover Timestamps & Export PDF
         run: |
+          COMMIT_ISO=$(git log -1 --format=%cI)
+          DISPLAY_TS=$(TZ='Asia/Jakarta' date -d "$COMMIT_ISO" +"%b %d, %Y · %H:%M WIB" | tr '[:lower:]' '[:upper:]')
+          FILE_TS=$(TZ='Asia/Jakarta' date -d "$COMMIT_ISO" +"%Y%m%d-%H%MWIB")
+
+          echo "Cover Stamp: LAST UPDATED: $DISPLAY_TS"
+          echo "PDF Output:  exports/Digitan-Guide-${FILE_TS}.pdf"
+
+          # 1. Update front and back cover timestamps in index.html
+          DISPLAY_TS="$DISPLAY_TS" node -e '
+            const fs = require("fs");
+            const ts = process.env.DISPLAY_TS;
+            let html = fs.readFileSync("index.html", "utf8");
+            html = html.replace(/LAST UPDATED:[^<]*WIB/g, `LAST UPDATED: ${ts}`);
+            fs.writeFileSync("index.html", html, "utf8");
+          '
+
+          # 2. Render exact 1280x720 PDF with updated cover timestamp
           mkdir -p exports
-          node -e '
+          rm -f exports/Digitan-Guide-*.pdf
+          PDF_PATH="exports/Digitan-Guide-${FILE_TS}.pdf" node -e '
             const { chromium } = require("playwright");
             const path = require("path");
             (async () => {
@@ -36,7 +58,7 @@ jobs:
               const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
               await page.goto("file://" + path.resolve("index.html"), { waitUntil: "networkidle" });
               await page.pdf({
-                path: "exports/Digitan-Guide.pdf",
+                path: process.env.PDF_PATH,
                 width: "1280px",
                 height: "720px",
                 printBackground: true,
@@ -46,10 +68,10 @@ jobs:
             })();
           '
 
-      - name: Commit updated PDF
+      - name: Commit stamped HTML and PDF
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add exports/Digitan-Guide.pdf
-          git diff --staged --quiet || git commit -m "chore: update exported PDF"
+          git add index.html exports/
+          git diff --staged --quiet || git commit -m "chore: update cover timestamp and export PDF [skip ci]"
           git push
