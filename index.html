@@ -3765,7 +3765,7 @@
       const slides = Array.from(document.querySelectorAll('.slide-container'));
       if (!slides.length) return;
 
-      // Inject runtime Stage Mode, HUD, and 1280x720 Print CSS
+      // 1. Inject Stage Mode, Auto-Fade HUD, and 1280x720 Print CSS
       if (!document.getElementById('digitan-deck-styles')) {
         const style = document.createElement('style');
         style.id = 'digitan-deck-styles';
@@ -3791,11 +3791,21 @@
             box-shadow: 0 28px 80px rgba(0, 0, 0, 0.75) !important;
             z-index: 10 !important;
           }
-          #deck-hud {
+
+          /* Hover / Tap Hit-Zone Wrapper */
+          #deck-hud-zone {
             position: fixed;
-            bottom: 18px;
-            right: 22px;
+            bottom: 0;
+            right: 0;
             z-index: 9999;
+            padding: 28px 22px 18px 36px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+          }
+
+          /* Floating Navigation Pill */
+          #deck-hud {
             display: flex;
             align-items: center;
             gap: 6px;
@@ -3803,16 +3813,25 @@
             border-radius: 9999px;
             background: rgba(15, 23, 42, 0.88);
             backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             border: 1px solid rgba(148, 163, 184, 0.28);
             box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
             font-family: 'Space Grotesk', sans-serif;
             font-size: 13px;
             font-weight: 700;
             color: #f8fafc;
-            transition: opacity 0.25s ease;
+            opacity: 1;
+            transition: opacity 0.35s ease;
           }
-          #deck-hud.hud-idle { opacity: 0.22; }
-          #deck-hud:hover { opacity: 1 !important; }
+          #deck-hud.hud-idle {
+            opacity: 0;
+          }
+          @media (hover: hover) and (pointer: fine) {
+            #deck-hud-zone:hover #deck-hud {
+              opacity: 1 !important;
+            }
+          }
+
           #deck-hud button {
             background: rgba(30, 41, 59, 0.95);
             color: #e2e8f0;
@@ -3823,8 +3842,19 @@
             font-size: 12px;
             font-weight: 700;
             cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.15s ease, color 0.15s ease;
           }
           #deck-hud button:hover {
+            background: #6366f1;
+            color: #ffffff;
+          }
+          #deck-hud button#hud-pdf {
+            background: rgba(79, 70, 229, 0.28);
+            border-color: rgba(129, 140, 248, 0.45);
+            color: #c7d2fe;
+          }
+          #deck-hud button#hud-pdf:hover {
             background: #6366f1;
             color: #ffffff;
           }
@@ -3833,7 +3863,10 @@
             color: #fde047;
             letter-spacing: 0.5px;
             user-select: none;
+            white-space: nowrap;
           }
+
+          /* Exact 1280x720 PDF / Print Overrides */
           @media print {
             @page {
               size: 1280px 720px;
@@ -3871,7 +3904,7 @@
               page-break-after: auto !important;
               break-after: auto !important;
             }
-            #deck-hud {
+            #deck-hud-zone {
               display: none !important;
             }
           }
@@ -3882,20 +3915,71 @@
       let current = 0;
       let isStage = true;
       let idleTimer = null;
+      let isHovered = false;
+      let wheelLocked = false;
+      let scrollTicking = false;
 
-      const hud = document.createElement('div');
-      hud.id = 'deck-hud';
-      hud.innerHTML = `
-        <button type="button" id="hud-mode" title="Toggle Stage / Scroll View (M)">Scroll</button>
-        <button type="button" id="hud-prev" title="Previous Slide (←)">‹ Prev</button>
-        <span id="deck-counter">01 / ${String(slides.length).padStart(2, '0')}</span>
-        <button type="button" id="hud-next" title="Next Slide (→)">Next ›</button>
-        <button type="button" id="hud-fs" title="Toggle Fullscreen (F)">⛶</button>
+      // 2. Build HUD Hit-Zone & Controls
+      const hudZone = document.createElement('div');
+      hudZone.id = 'deck-hud-zone';
+      hudZone.innerHTML = `
+        <div id="deck-hud">
+          <button type="button" id="hud-mode" title="Toggle Stage / Scroll View (M)">Scroll</button>
+          <button type="button" id="hud-prev" title="Previous Slide (←)">‹ Prev</button>
+          <span id="deck-counter">01 / ${String(slides.length).padStart(2, '0')}</span>
+          <button type="button" id="hud-next" title="Next Slide (→)">Next ›</button>
+          <button type="button" id="hud-pdf" title="Save as PDF">↓ PDF</button>
+          <button type="button" id="hud-fs" title="Toggle Fullscreen (F)">⛶</button>
+        </div>
       `;
-      document.body.appendChild(hud);
+      document.body.appendChild(hudZone);
 
+      const hud = document.getElementById('deck-hud');
       const counterEl = document.getElementById('deck-counter');
       const modeBtn = document.getElementById('hud-mode');
+      const pdfBtn = document.getElementById('hud-pdf');
+
+      // 3. Auto-Fade & Wake Logic (Desktop Hover + Mobile Tap-to-Wake)
+      function scheduleIdle(delay = 2500) {
+        clearTimeout(idleTimer);
+        if (isHovered) return;
+        idleTimer = setTimeout(() => {
+          hud.classList.add('hud-idle');
+        }, delay);
+      }
+
+      function wakeHud(delay = 2800) {
+        hud.classList.remove('hud-idle');
+        scheduleIdle(delay);
+      }
+
+      // Desktop hover zone behavior
+      hudZone.addEventListener('mouseenter', () => {
+        isHovered = true;
+        clearTimeout(idleTimer);
+        hud.classList.remove('hud-idle');
+      });
+
+      hudZone.addEventListener('mouseleave', () => {
+        isHovered = false;
+        scheduleIdle(1600);
+      });
+
+      // Mobile / Touch tap-to-wake: first tap reveals hidden HUD without accidentally clicking a button
+      hudZone.addEventListener('click', (e) => {
+        if (hud.classList.contains('hud-idle')) {
+          e.preventDefault();
+          e.stopPropagation();
+          wakeHud(3200);
+          return;
+        }
+        wakeHud(3200);
+      }, true);
+
+      // 4. Slide Scaling & Navigation
+      function updateCounter(index) {
+        counterEl.textContent = `${String(index + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+      }
 
       function scaleActiveSlide() {
         slides.forEach((s, idx) => {
@@ -3915,13 +3999,93 @@
       function showSlide(index, updateHash = true) {
         current = Math.max(0, Math.min(slides.length - 1, index));
         slides.forEach((s, idx) => s.classList.toggle('active-slide', idx === current));
-        counterEl.textContent = `${String(current + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+        updateCounter(current);
         scaleActiveSlide();
         if (!isStage) {
-          slides[current].scrollIntoView({ behavior: 'smooth', block: 'start' });
+          slides[current].scrollIntoView({ behavior: 'smooth', block: 'center' });
         } else if (updateHash) {
           history.replaceState(null, '', `#slide-${String(current + 1).padStart(2, '0')}`);
         }
+      }
+
+      // 5. Scroll Mode Center-of-Viewport Page Tracking (PC & Mobile)
+      function syncSlideFromScroll() {
+        scrollTicking = false;
+        if (isStage) return;
+
+        const viewportCenter = window.innerHeight / 2;
+        let closestIdx = current;
+        let minDistance = Infinity;
+
+        slides.forEach((slide, idx) => {
+          const rect = slide.getBoundingClientRect();
+          const slideCenter = rect.top + rect.height / 2;
+          const dist = Math.abs(slideCenter - viewportCenter);
+          if (dist < minDistance) {
+            minDistance = dist;
+            closestIdx = idx;
+          }
+        });
+
+        if (closestIdx !== current) {
+          current = closestIdx;
+          slides.forEach((s, idx) => s.classList.toggle('active-slide', idx === current));
+          updateCounter(current);
+          history.replaceState(null, '', `#slide-${String(current + 1).padStart(2, '0')}`);
+        }
+      }
+
+      window.addEventListener('scroll', () => {
+        if (isStage || scrollTicking) return;
+        scrollTicking = true;
+        requestAnimationFrame(syncSlideFromScroll);
+      }, { passive: true });
+
+      // 6. Stage Mode Mouse Wheel Navigation (PC)
+      window.addEventListener('wheel', (e) => {
+        if (!isStage) return;
+        if (e.ctrlKey || e.metaKey) return;
+        if (e.target && e.target.isContentEditable) return;
+
+        e.preventDefault();
+        if (wheelLocked || Math.abs(e.deltaY) < 12) return;
+
+        wheelLocked = true;
+        showSlide(e.deltaY > 0 ? current + 1 : current - 1);
+        setTimeout(() => { wheelLocked = false; }, 360);
+      }, { passive: false });
+
+      // 7. Save as PDF (Downloads latest GitHub Actions 1280x720 PDF, or falls back to Print)
+      async function saveAsPdf() {
+        const originalLabel = pdfBtn.textContent;
+        pdfBtn.textContent = 'PDF...';
+        try {
+          if (window.location.hostname.endsWith('github.io')) {
+            const owner = window.location.hostname.split('.')[0];
+            const repo = window.location.pathname.split('/').filter(Boolean)[0];
+            if (owner && repo) {
+              const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/exports`);
+              if (res.ok) {
+                const files = await res.json();
+                const pdfs = Array.isArray(files)
+                  ? files.filter((f) => f.name && f.name.endsWith('.pdf')).sort((a, b) => b.name.localeCompare(a.name))
+                  : [];
+                if (pdfs.length > 0) {
+                  const link = document.createElement('a');
+                  link.href = `./exports/${pdfs[0].name}`;
+                  link.download = pdfs[0].name;
+                  document.body.appendChild(link);
+                  link.click();
+                  link.remove();
+                  pdfBtn.textContent = originalLabel;
+                  return;
+                }
+              }
+            }
+          }
+        } catch (_) {}
+        pdfBtn.textContent = originalLabel;
+        window.print();
       }
 
       function setMode(stageEnabled) {
@@ -3929,6 +4093,9 @@
         document.body.classList.toggle('stage-mode', isStage);
         modeBtn.textContent = isStage ? 'Scroll' : 'Stage';
         showSlide(current, false);
+        if (!isStage) {
+          requestAnimationFrame(syncSlideFromScroll);
+        }
       }
 
       function toggleFullscreen() {
@@ -3939,16 +4106,10 @@
         }
       }
 
-      function resetIdle() {
-        hud.classList.remove('hud-idle');
-        clearTimeout(idleTimer);
-        if (isStage) {
-          idleTimer = setTimeout(() => hud.classList.add('hud-idle'), 2800);
-        }
-      }
-
+      // Button & Keyboard Listeners
       document.getElementById('hud-prev').addEventListener('click', () => showSlide(current - 1));
       document.getElementById('hud-next').addEventListener('click', () => showSlide(current + 1));
+      pdfBtn.addEventListener('click', saveAsPdf);
       document.getElementById('hud-fs').addEventListener('click', toggleFullscreen);
       modeBtn.addEventListener('click', () => setMode(!isStage));
 
@@ -3977,10 +4138,10 @@
         }
       });
 
+      // Touch Swipe Navigation in Stage Mode
       let touchStartX = 0;
       window.addEventListener('touchstart', (e) => {
         touchStartX = e.changedTouches[0].screenX;
-        resetIdle();
       }, { passive: true });
 
       window.addEventListener('touchend', (e) => {
@@ -3992,8 +4153,8 @@
       }, { passive: true });
 
       window.addEventListener('resize', scaleActiveSlide);
-      window.addEventListener('mousemove', resetIdle, { passive: true });
 
+      // Initialize from URL hash if present
       const hashMatch = window.location.hash.match(/^#slide-(\d+)$/);
       if (hashMatch) {
         const target = parseInt(hashMatch[1], 10) - 1;
@@ -4001,7 +4162,7 @@
       }
 
       setMode(true);
-      resetIdle();
+      scheduleIdle(2500);
     })();
   </script>
 </body></html>
