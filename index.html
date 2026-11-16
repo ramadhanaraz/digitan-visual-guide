@@ -3765,11 +3765,124 @@
       const slides = Array.from(document.querySelectorAll('.slide-container'));
       if (!slides.length) return;
 
+      // Inject runtime Stage Mode, HUD, and 1280x720 Print CSS
+      if (!document.getElementById('digitan-deck-styles')) {
+        const style = document.createElement('style');
+        style.id = 'digitan-deck-styles';
+        style.textContent = `
+          body.stage-mode {
+            background: #05080f !important;
+            overflow: hidden !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            margin: 0 !important;
+            padding: 0 !important;
+          }
+          body.stage-mode .slide-container:not(.active-slide) {
+            display: none !important;
+          }
+          body.stage-mode .slide-container.active-slide {
+            display: flex !important;
+            position: fixed !important;
+            top: 50% !important;
+            left: 50% !important;
+            margin: 0 !important;
+            transform-origin: center center !important;
+            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.75) !important;
+            z-index: 10 !important;
+          }
+          #deck-hud {
+            position: fixed;
+            bottom: 18px;
+            right: 22px;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 9999px;
+            background: rgba(15, 23, 42, 0.88);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(148, 163, 184, 0.28);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: #f8fafc;
+            transition: opacity 0.25s ease;
+          }
+          #deck-hud.hud-idle { opacity: 0.22; }
+          #deck-hud:hover { opacity: 1 !important; }
+          #deck-hud button {
+            background: rgba(30, 41, 59, 0.95);
+            color: #e2e8f0;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 9999px;
+            padding: 5px 11px;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+          }
+          #deck-hud button:hover {
+            background: #6366f1;
+            color: #ffffff;
+          }
+          #deck-counter {
+            padding: 0 8px;
+            color: #fde047;
+            letter-spacing: 0.5px;
+            user-select: none;
+          }
+          @media print {
+            @page {
+              size: 1280px 720px;
+              margin: 0;
+            }
+            html, body, body.stage-mode {
+              width: 1280px !important;
+              height: auto !important;
+              overflow: visible !important;
+              margin: 0 !important;
+              padding: 0 !important;
+              background: transparent !important;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+            .slide-container,
+            body.stage-mode .slide-container,
+            body.stage-mode .slide-container:not(.active-slide),
+            body.stage-mode .slide-container.active-slide {
+              display: flex !important;
+              position: static !important;
+              top: auto !important;
+              left: auto !important;
+              transform: none !important;
+              width: 1280px !important;
+              height: 720px !important;
+              margin: 0 !important;
+              box-shadow: none !important;
+              page-break-after: always !important;
+              break-after: page !important;
+              page-break-inside: avoid !important;
+              break-inside: avoid !important;
+            }
+            .slide-container:last-of-type {
+              page-break-after: auto !important;
+              break-after: auto !important;
+            }
+            #deck-hud {
+              display: none !important;
+            }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+
       let current = 0;
       let isStage = true;
       let idleTimer = null;
 
-      // Build floating HUD
       const hud = document.createElement('div');
       hud.id = 'deck-hud';
       hud.innerHTML = `
@@ -3834,13 +3947,11 @@
         }
       }
 
-      // Button bindings
       document.getElementById('hud-prev').addEventListener('click', () => showSlide(current - 1));
       document.getElementById('hud-next').addEventListener('click', () => showSlide(current + 1));
       document.getElementById('hud-fs').addEventListener('click', toggleFullscreen);
       modeBtn.addEventListener('click', () => setMode(!isStage));
 
-      // Keyboard navigation (disabled while editing contenteditable elements)
       window.addEventListener('keydown', (e) => {
         if (e.target && e.target.isContentEditable) return;
         if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(e.key)) {
@@ -3866,7 +3977,6 @@
         }
       });
 
-      // Touch swipe navigation for mobile/tablets
       let touchStartX = 0;
       window.addEventListener('touchstart', (e) => {
         touchStartX = e.changedTouches[0].screenX;
@@ -3884,7 +3994,6 @@
       window.addEventListener('resize', scaleActiveSlide);
       window.addEventListener('mousemove', resetIdle, { passive: true });
 
-      // Initialize from URL hash if present (e.g., #slide-14)
       const hashMatch = window.location.hash.match(/^#slide-(\d+)$/);
       if (hashMatch) {
         const target = parseInt(hashMatch[1], 10) - 1;
