@@ -6,9 +6,16 @@
   <title>Digitan’s Guide to Luminous Gradients &amp; Architectural Shapes</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: #e2e8f0; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #05080f;
+      transition: background-color 0.25s ease;
+    }
     .slide-container {
       width: 1280px;
       height: 720px;
@@ -17,73 +24,299 @@
       box-sizing: border-box;
     }
 
-    /* --- Presentation Stage Mode --- */
+    /* --- Scroll All Mode Spacing --- */
+    body:not(.stage-mode) {
+      padding: 24px 0 92px;
+    }
+    body:not(.stage-mode) .slide-container {
+      margin: 0 auto 24px auto !important;
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+    }
+    body:not(.stage-mode) .slide-container:last-of-type {
+      margin-bottom: 0 !important;
+    }
+
+    /* --- Single Slide / Presentation Stage Mode --- */
     body.stage-mode {
-      background: #05080f;
-      overflow: hidden;
-      width: 100vw;
-      height: 100vh;
+      background: #05080f !important;
+      overflow: hidden !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      margin: 0 !important;
+      padding: 0 !important;
     }
     body.stage-mode .slide-container:not(.active-slide) {
       display: none !important;
     }
     body.stage-mode .slide-container.active-slide {
-      position: fixed;
-      top: 50%;
-      left: 50%;
+      display: flex !important;
+      position: fixed !important;
+      top: 50% !important;
+      left: 50% !important;
       margin: 0 !important;
-      transform-origin: center center;
-      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.75);
+      transform-origin: center center !important;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.75) !important;
+      z-index: 10 !important;
     }
 
-    /* --- Floating Presentation HUD --- */
-    #deck-hud {
+    /* --- Light Theme (Outer Backdrop & Cover Slides #slide1 / #slide15 Only; Slides 02-29 Untouched) --- */
+    body.theme-light,
+    body.theme-light.stage-mode {
+      background: #e2e8f0 !important;
+    }
+    body.theme-light:not(.stage-mode) .slide-container {
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.14);
+    }
+    body.theme-light.stage-mode .slide-container.active-slide {
+      box-shadow: 0 24px 64px rgba(15, 23, 42, 0.18) !important;
+    }
+    body.theme-light #slide1,
+    body.theme-light #slide15 {
+      background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 58%, #e2e8f0 100%) !important;
+    }
+    body.theme-light #slide1 > div:first-child p:nth-of-type(1),
+    body.theme-light #slide15 > div:first-child p:nth-of-type(1) {
+      color: #4f46e5 !important;
+    }
+    body.theme-light #slide1 > div:first-child p:nth-of-type(2),
+    body.theme-light #slide15 > div:first-child p:nth-of-type(2) {
+      color: #db2777 !important;
+    }
+    body.theme-light #slide1 h1,
+    body.theme-light #slide15 h2 {
+      color: #0f172a !important;
+    }
+    body.theme-light #slide1 > div:first-child > div:first-child > p {
+      color: #475569 !important;
+    }
+    body.theme-light #slide1 > div:first-child > div:last-child,
+    body.theme-light #slide15 > div:first-child > div:last-child {
+      border-top-color: #cbd5e1 !important;
+    }
+    body.theme-light #slide1 > div:first-child > div:last-child > span:first-child,
+    body.theme-light #slide15 > div:first-child > div:last-child > span:first-child {
+      color: #4f46e5 !important;
+    }
+    body.theme-light #slide1 > div:first-child > div:last-child > span:last-child,
+    body.theme-light #slide15 > div:first-child > div:last-child > span:last-child {
+      color: #64748b !important;
+    }
+    body.theme-light #slide1 > div:last-child,
+    body.theme-light #slide15 > div:last-child {
+      background: radial-gradient(circle at center, rgba(99, 102, 241, 0.14) 0%, rgba(241, 245, 249, 0.96) 85%) !important;
+    }
+    body.theme-light #slide1 > div:last-child > div,
+    body.theme-light #slide15 > div:last-child > div {
+      opacity: 0.48 !important;
+      filter: blur(1px) brightness(0.98) !important;
+    }
+
+    /* --- Floating Presentation Toolbar & Bottom-Right Hit Zone --- */
+    #deck-hud-zone {
       position: fixed;
-      bottom: 18px;
-      right: 22px;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
       z-index: 9999;
+      padding: 28px 24px 18px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      max-width: 100vw;
+    }
+    #deck-hud {
       display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
+      gap: 5px;
+      padding: 6px 8px;
       border-radius: 9999px;
-      background: rgba(15, 23, 42, 0.86);
-      backdrop-filter: blur(14px);
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(16px) saturate(160%);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
       border: 1px solid rgba(148, 163, 184, 0.25);
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.08);
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       color: #f8fafc;
-      transition: opacity 0.25s ease;
+      opacity: 1;
+      transition: opacity 0.35s ease, background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }
     #deck-hud.hud-idle {
-      opacity: 0.18;
+      opacity: 0.15;
     }
-    #deck-hud:hover {
-      opacity: 1 !important;
+    @media (hover: hover) and (pointer: fine) {
+      #deck-hud-zone:hover #deck-hud {
+        opacity: 1 !important;
+      }
     }
-    #deck-hud button {
-      background: rgba(30, 41, 59, 0.9);
-      color: #e2e8f0;
-      border: 1px solid rgba(148, 163, 184, 0.22);
+    #deck-hud .hud-sep {
+      width: 1px;
+      height: 18px;
+      background: rgba(148, 163, 184, 0.24);
+      margin: 0 2px;
+      flex-shrink: 0;
+    }
+    #deck-hud .hud-btn {
+      height: 30px;
+      padding: 0 11px;
       border-radius: 9999px;
-      padding: 5px 11px;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      background: rgba(30, 41, 59, 0.92);
+      color: #e2e8f0;
       font-family: inherit;
       font-size: 12px;
       font-weight: 700;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
       cursor: pointer;
-      transition: background 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
+      user-select: none;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
     }
-    #deck-hud button:hover {
+    #deck-hud .hud-btn:hover:not(:disabled) {
       background: #6366f1;
+      border-color: #818cf8;
+      color: #ffffff;
+    }
+    #deck-hud .hud-btn.is-active {
+      background: #4f46e5;
+      border-color: #818cf8;
+      color: #ffffff;
+    }
+    #deck-hud .hud-btn:disabled {
+      opacity: 0.42;
+      cursor: default;
+    }
+    #deck-hud .hud-btn-pptx {
+      background: rgba(234, 88, 12, 0.22);
+      border-color: rgba(251, 146, 60, 0.42);
+      color: #fed7aa;
+    }
+    #deck-hud .hud-btn-pptx:hover:not(:disabled) {
+      background: #ea580c;
+      border-color: #fb923c;
+      color: #ffffff;
+    }
+    #deck-hud .hud-btn-pdf {
+      background: rgba(79, 70, 229, 0.26);
+      border-color: rgba(129, 140, 248, 0.45);
+      color: #c7d2fe;
+    }
+    #deck-hud .hud-btn-pdf:hover:not(:disabled) {
+      background: #4f46e5;
+      border-color: #818cf8;
       color: #ffffff;
     }
     #deck-counter {
       padding: 0 8px;
       color: #fde047;
       letter-spacing: 0.5px;
+      font-variant-numeric: tabular-nums;
       user-select: none;
+      white-space: nowrap;
+    }
+
+    /* Light Theme Toolbar Palette */
+    body.theme-light #deck-hud {
+      background: rgba(255, 255, 255, 0.92);
+      border-color: rgba(15, 23, 42, 0.12);
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      color: #0f172a;
+    }
+    body.theme-light #deck-hud .hud-sep {
+      background: rgba(15, 23, 42, 0.14);
+    }
+    body.theme-light #deck-hud .hud-btn {
+      background: rgba(241, 245, 249, 0.95);
+      border-color: rgba(15, 23, 42, 0.12);
+      color: #1e293b;
+    }
+    body.theme-light #deck-hud .hud-btn:hover:not(:disabled),
+    body.theme-light #deck-hud .hud-btn.is-active {
+      background: #4f46e5;
+      border-color: #4f46e5;
+      color: #ffffff;
+    }
+    body.theme-light #deck-hud .hud-btn-pptx {
+      background: rgba(234, 88, 12, 0.12);
+      border-color: rgba(234, 88, 12, 0.32);
+      color: #c2410c;
+    }
+    body.theme-light #deck-hud .hud-btn-pptx:hover:not(:disabled) {
+      background: #ea580c;
+      border-color: #ea580c;
+      color: #ffffff;
+    }
+    body.theme-light #deck-hud .hud-btn-pdf {
+      background: rgba(79, 70, 229, 0.12);
+      border-color: rgba(79, 70, 229, 0.32);
+      color: #4338ca;
+    }
+    body.theme-light #deck-hud .hud-btn-pdf:hover:not(:disabled) {
+      background: #4f46e5;
+      border-color: #4f46e5;
+      color: #ffffff;
+    }
+    body.theme-light #deck-counter {
+      color: #4f46e5;
+    }
+
+    @media (max-width: 767px) {
+      #deck-hud-zone {
+        left: 0;
+        right: 0;
+        transform: none;
+        justify-content: center;
+        padding: 18px 10px 12px;
+      }
+      #deck-hud {
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: calc(100vw - 20px);
+        border-radius: 20px;
+        padding: 6px 8px;
+        gap: 4px;
+      }
+      #deck-hud .hud-sep {
+        display: none;
+      }
+      #deck-hud .hud-btn {
+        height: 28px;
+        padding: 0 9px;
+        font-size: 11px;
+        gap: 5px;
+      }
+      #deck-counter {
+        padding: 0 6px;
+        font-size: 11px;
+      }
+    }
+
+    /* Offscreen PPTX Measurement Host */
+    #pptx-measure-host {
+      position: fixed;
+      left: -20000px;
+      top: 0;
+      width: 1280px;
+      height: 720px;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: -1;
+    }
+    #pptx-measure-host .slide-container {
+      display: flex !important;
+      position: static !important;
+      top: auto !important;
+      left: auto !important;
+      transform: none !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      width: 1280px !important;
+      height: 720px !important;
     }
 
     /* --- Exact 1280x720 PDF / Print Overrides --- */
@@ -92,7 +325,7 @@
         size: 1280px 720px;
         margin: 0;
       }
-      html, body, body.stage-mode {
+      html, body, body.stage-mode, body.theme-light, body.theme-light.stage-mode {
         width: 1280px !important;
         height: auto !important;
         overflow: visible !important;
@@ -103,25 +336,31 @@
         print-color-adjust: exact !important;
       }
       .slide-container,
+      body:not(.stage-mode) .slide-container,
       body.stage-mode .slide-container,
-      body.stage-mode .slide-container:not(.active-slide) {
+      body.stage-mode .slide-container:not(.active-slide),
+      body.stage-mode .slide-container.active-slide {
         display: flex !important;
         position: static !important;
+        top: auto !important;
+        left: auto !important;
         transform: none !important;
         width: 1280px !important;
         height: 720px !important;
         margin: 0 !important;
         box-shadow: none !important;
-        page-break-after: always;
-        break-after: page;
-        page-break-inside: avoid;
-        break-inside: avoid;
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
       .slide-container:last-of-type {
-        page-break-after: auto;
-        break-after: auto;
+        page-break-after: auto !important;
+        break-after: auto !important;
       }
-      #deck-hud {
+      #deck-hud-zone,
+      #deck-hud,
+      #pptx-measure-host {
         display: none !important;
       }
     }
@@ -3760,189 +3999,74 @@
     </div>
   </div>
 
-<script>
+  <!-- Floating Presentation Toolbar -->
+  <div id="deck-hud-zone">
+    <nav id="deck-hud" aria-label="Presentation Toolbar">
+      <button type="button" id="hud-prev" class="hud-btn" title="Previous Slide (←)" aria-label="Previous Slide">
+        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        <span class="hud-label">Prev</span>
+      </button>
+      <span id="deck-counter" aria-live="polite">01 / 30</span>
+      <button type="button" id="hud-next" class="hud-btn" title="Next Slide (→)" aria-label="Next Slide">
+        <span class="hud-label">Next</span>
+        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+      </button>
+      <span class="hud-sep" aria-hidden="true"></span>
+      <button type="button" id="hud-present" class="hud-btn" title="Present Fullscreen (F)" aria-label="Present Fullscreen">
+        <i class="fa-solid fa-play" aria-hidden="true"></i>
+        <span class="hud-label">Present</span>
+      </button>
+      <button type="button" id="hud-mode" class="hud-btn" title="Switch to Scroll All (M)" aria-label="Toggle Scroll All / Single Slide">
+        <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+        <span class="hud-label">Scroll All</span>
+      </button>
+      <button type="button" id="hud-theme" class="hud-btn" title="Switch to Light Theme (T)" aria-label="Toggle Theme">
+        <i class="fa-solid fa-sun" aria-hidden="true"></i>
+        <span class="hud-label">Light</span>
+      </button>
+      <span class="hud-sep" aria-hidden="true"></span>
+      <button type="button" id="hud-pptx" class="hud-btn hud-btn-pptx" title="Export 16:9 PowerPoint (Digitan_Visual_Guide.pptx)" aria-label="Export PPTX">
+        <i class="fa-solid fa-file-powerpoint" aria-hidden="true"></i>
+        <span class="hud-label">.PPTX</span>
+      </button>
+      <button type="button" id="hud-pdf" class="hud-btn hud-btn-pdf" title="Export PDF" aria-label="Export PDF">
+        <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
+        <span class="hud-label">.PDF</span>
+      </button>
+    </nav>
+  </div>
+
+  <script>
     (() => {
       const slides = Array.from(document.querySelectorAll('.slide-container'));
       if (!slides.length) return;
 
-      // 1. Inject Stage Mode, Auto-Fade HUD, and 1280x720 Print CSS
-      if (!document.getElementById('digitan-deck-styles')) {
-        const style = document.createElement('style');
-        style.id = 'digitan-deck-styles';
-        style.textContent = `
-          body.stage-mode {
-            background: #05080f !important;
-            overflow: hidden !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            margin: 0 !important;
-            padding: 0 !important;
-          }
-          body.stage-mode .slide-container:not(.active-slide) {
-            display: none !important;
-          }
-          body.stage-mode .slide-container.active-slide {
-            display: flex !important;
-            position: fixed !important;
-            top: 50% !important;
-            left: 50% !important;
-            margin: 0 !important;
-            transform-origin: center center !important;
-            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.75) !important;
-            z-index: 10 !important;
-          }
-
-          /* Hover / Tap Hit-Zone Wrapper */
-          #deck-hud-zone {
-            position: fixed;
-            bottom: 0;
-            right: 0;
-            z-index: 9999;
-            padding: 28px 22px 18px 36px;
-            display: flex;
-            align-items: flex-end;
-            justify-content: flex-end;
-          }
-
-          /* Floating Navigation Pill */
-          #deck-hud {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 10px;
-            border-radius: 9999px;
-            background: rgba(15, 23, 42, 0.88);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(148, 163, 184, 0.28);
-            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 13px;
-            font-weight: 700;
-            color: #f8fafc;
-            opacity: 1;
-            transition: opacity 0.35s ease;
-          }
-          #deck-hud.hud-idle {
-            opacity: 0;
-          }
-          @media (hover: hover) and (pointer: fine) {
-            #deck-hud-zone:hover #deck-hud {
-              opacity: 1 !important;
-            }
-          }
-
-          #deck-hud button {
-            background: rgba(30, 41, 59, 0.95);
-            color: #e2e8f0;
-            border: 1px solid rgba(148, 163, 184, 0.25);
-            border-radius: 9999px;
-            padding: 5px 11px;
-            font-family: inherit;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: background 0.15s ease, color 0.15s ease;
-          }
-          #deck-hud button:hover {
-            background: #6366f1;
-            color: #ffffff;
-          }
-          #deck-hud button#hud-pdf {
-            background: rgba(79, 70, 229, 0.28);
-            border-color: rgba(129, 140, 248, 0.45);
-            color: #c7d2fe;
-          }
-          #deck-hud button#hud-pdf:hover {
-            background: #6366f1;
-            color: #ffffff;
-          }
-          #deck-counter {
-            padding: 0 8px;
-            color: #fde047;
-            letter-spacing: 0.5px;
-            user-select: none;
-            white-space: nowrap;
-          }
-
-          /* Exact 1280x720 PDF / Print Overrides */
-          @media print {
-            @page {
-              size: 1280px 720px;
-              margin: 0;
-            }
-            html, body, body.stage-mode {
-              width: 1280px !important;
-              height: auto !important;
-              overflow: visible !important;
-              margin: 0 !important;
-              padding: 0 !important;
-              background: transparent !important;
-              -webkit-print-color-adjust: exact !important;
-              print-color-adjust: exact !important;
-            }
-            .slide-container,
-            body.stage-mode .slide-container,
-            body.stage-mode .slide-container:not(.active-slide),
-            body.stage-mode .slide-container.active-slide {
-              display: flex !important;
-              position: static !important;
-              top: auto !important;
-              left: auto !important;
-              transform: none !important;
-              width: 1280px !important;
-              height: 720px !important;
-              margin: 0 !important;
-              box-shadow: none !important;
-              page-break-after: always !important;
-              break-after: page !important;
-              page-break-inside: avoid !important;
-              break-inside: avoid !important;
-            }
-            .slide-container:last-of-type {
-              page-break-after: auto !important;
-              break-after: auto !important;
-            }
-            #deck-hud-zone {
-              display: none !important;
-            }
-          }
-        `;
-        document.head.appendChild(style);
-      }
-
       let current = 0;
       let isStage = true;
+      let isLightTheme = false;
+      let isExportingPptx = false;
       let idleTimer = null;
       let isHovered = false;
       let wheelLocked = false;
       let scrollTicking = false;
 
-      // 2. Build HUD Hit-Zone & Controls
-      const hudZone = document.createElement('div');
-      hudZone.id = 'deck-hud-zone';
-      hudZone.innerHTML = `
-        <div id="deck-hud">
-          <button type="button" id="hud-mode" title="Toggle Stage / Scroll View (M)">Scroll</button>
-          <button type="button" id="hud-prev" title="Previous Slide (←)">‹ Prev</button>
-          <span id="deck-counter">01 / ${String(slides.length).padStart(2, '0')}</span>
-          <button type="button" id="hud-next" title="Next Slide (→)">Next ›</button>
-          <button type="button" id="hud-pdf" title="Save as PDF">↓ PDF</button>
-          <button type="button" id="hud-fs" title="Toggle Fullscreen (F)">⛶</button>
-        </div>
-      `;
-      document.body.appendChild(hudZone);
-
+      const hudZone = document.getElementById('deck-hud-zone');
       const hud = document.getElementById('deck-hud');
       const counterEl = document.getElementById('deck-counter');
+      const prevBtn = document.getElementById('hud-prev');
+      const nextBtn = document.getElementById('hud-next');
+      const presentBtn = document.getElementById('hud-present');
       const modeBtn = document.getElementById('hud-mode');
+      const themeBtn = document.getElementById('hud-theme');
+      const pptxBtn = document.getElementById('hud-pptx');
       const pdfBtn = document.getElementById('hud-pdf');
 
-      // 3. Auto-Fade & Wake Logic (Desktop Hover + Mobile Tap-to-Wake)
+      const pad2 = (n) => String(n).padStart(2, '0');
+
+      // 1. Auto-Fade & Wake Logic (Desktop Hover + Mobile Tap-to-Wake)
       function scheduleIdle(delay = 2500) {
         clearTimeout(idleTimer);
-        if (isHovered) return;
+        if (isHovered || isExportingPptx) return;
         idleTimer = setTimeout(() => {
           hud.classList.add('hud-idle');
         }, delay);
@@ -3953,7 +4077,6 @@
         scheduleIdle(delay);
       }
 
-      // Desktop hover zone behavior
       hudZone.addEventListener('mouseenter', () => {
         isHovered = true;
         clearTimeout(idleTimer);
@@ -3976,9 +4099,11 @@
         wakeHud(3200);
       }, true);
 
-      // 4. Slide Scaling & Navigation
+      // 2. Slide Scaling, Counter & Navigation
       function updateCounter(index) {
-        counterEl.textContent = `${String(index + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+        counterEl.textContent = `${pad2(index + 1)} / ${pad2(slides.length)}`;
+        prevBtn.disabled = index <= 0;
+        nextBtn.disabled = index >= slides.length - 1;
       }
 
       function scaleActiveSlide() {
@@ -4004,11 +4129,11 @@
         if (!isStage) {
           slides[current].scrollIntoView({ behavior: 'smooth', block: 'center' });
         } else if (updateHash) {
-          history.replaceState(null, '', `#slide-${String(current + 1).padStart(2, '0')}`);
+          history.replaceState(null, '', `#slide-${pad2(current + 1)}`);
         }
       }
 
-      // 5. Scroll Mode Center-of-Viewport Page Tracking (PC & Mobile)
+      // 3. Scroll Mode Center-of-Viewport Page Tracking (PC & Mobile)
       function syncSlideFromScroll() {
         scrollTicking = false;
         if (isStage) return;
@@ -4031,7 +4156,7 @@
           current = closestIdx;
           slides.forEach((s, idx) => s.classList.toggle('active-slide', idx === current));
           updateCounter(current);
-          history.replaceState(null, '', `#slide-${String(current + 1).padStart(2, '0')}`);
+          history.replaceState(null, '', `#slide-${pad2(current + 1)}`);
         }
       }
 
@@ -4041,7 +4166,7 @@
         requestAnimationFrame(syncSlideFromScroll);
       }, { passive: true });
 
-      // 6. Stage Mode Mouse Wheel Navigation (PC)
+      // 4. Single Slide / Present Mode Mouse Wheel Navigation (360ms debounced)
       window.addEventListener('wheel', (e) => {
         if (!isStage) return;
         if (e.ctrlKey || e.metaKey) return;
@@ -4055,10 +4180,91 @@
         setTimeout(() => { wheelLocked = false; }, 360);
       }, { passive: false });
 
-      // 7. Save as PDF (Downloads latest GitHub Actions 1280x720 PDF, or falls back to Print)
+      // 5. Mode, Presentation (Fullscreen), and Theme Toggles
+      function setMode(stageEnabled) {
+        isStage = stageEnabled;
+        document.body.classList.toggle('stage-mode', isStage);
+
+        const icon = modeBtn.querySelector('i');
+        const label = modeBtn.querySelector('.hud-label');
+        if (isStage) {
+          icon.className = 'fa-solid fa-layer-group';
+          label.textContent = 'Scroll All';
+          modeBtn.title = 'Switch to Scroll All (M)';
+          modeBtn.classList.remove('is-active');
+        } else {
+          icon.className = 'fa-solid fa-display';
+          label.textContent = 'Single Slide';
+          modeBtn.title = 'Switch to Single Slide (M)';
+          modeBtn.classList.add('is-active');
+        }
+
+        showSlide(current, false);
+        if (!isStage) {
+          requestAnimationFrame(syncSlideFromScroll);
+        }
+      }
+
+      function updatePresentButton() {
+        const isFs = Boolean(document.fullscreenElement);
+        const icon = presentBtn.querySelector('i');
+        const label = presentBtn.querySelector('.hud-label');
+        if (isFs) {
+          icon.className = 'fa-solid fa-compress';
+          label.textContent = 'Exit';
+          presentBtn.title = 'Exit Presentation (F / Esc)';
+          presentBtn.classList.add('is-active');
+        } else {
+          icon.className = 'fa-solid fa-play';
+          label.textContent = 'Present';
+          presentBtn.title = 'Present Fullscreen (F)';
+          presentBtn.classList.remove('is-active');
+        }
+      }
+
+      function togglePresentation() {
+        if (!document.fullscreenElement) {
+          if (!isStage) setMode(true);
+          if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen().catch(() => {});
+          }
+        } else if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+
+      document.addEventListener('fullscreenchange', updatePresentButton);
+
+      function applyTheme(lightEnabled, persist = true) {
+        isLightTheme = Boolean(lightEnabled);
+        document.body.classList.toggle('theme-light', isLightTheme);
+
+        const icon = themeBtn.querySelector('i');
+        const label = themeBtn.querySelector('.hud-label');
+        if (isLightTheme) {
+          icon.className = 'fa-solid fa-moon';
+          label.textContent = 'Dark';
+          themeBtn.title = 'Switch to Dark Theme (T)';
+          themeBtn.classList.add('is-active');
+        } else {
+          icon.className = 'fa-solid fa-sun';
+          label.textContent = 'Light';
+          themeBtn.title = 'Switch to Light Theme (T)';
+          themeBtn.classList.remove('is-active');
+        }
+
+        if (persist) {
+          try {
+            localStorage.setItem('digitan-deck-theme', isLightTheme ? 'light' : 'dark');
+          } catch (_) {}
+        }
+      }
+
+      // 6. Export .PDF (Downloads latest GitHub Actions exports/Digitan-Guide-*.pdf, or falls back to window.print())
       async function saveAsPdf() {
-        const originalLabel = pdfBtn.textContent;
-        pdfBtn.textContent = 'PDF...';
+        const label = pdfBtn.querySelector('.hud-label');
+        const originalLabel = label.textContent;
+        label.textContent = 'PDF...';
         try {
           if (window.location.hostname.endsWith('github.io')) {
             const owner = window.location.hostname.split('.')[0];
@@ -4068,7 +4274,14 @@
               if (res.ok) {
                 const files = await res.json();
                 const pdfs = Array.isArray(files)
-                  ? files.filter((f) => f.name && f.name.endsWith('.pdf')).sort((a, b) => b.name.localeCompare(a.name))
+                  ? files
+                      .filter((f) => f.name && f.name.endsWith('.pdf'))
+                      .sort((a, b) => {
+                        const aMatch = a.name.startsWith('Digitan-Guide-') ? 1 : 0;
+                        const bMatch = b.name.startsWith('Digitan-Guide-') ? 1 : 0;
+                        if (aMatch !== bMatch) return bMatch - aMatch;
+                        return b.name.localeCompare(a.name);
+                      })
                   : [];
                 if (pdfs.length > 0) {
                   const link = document.createElement('a');
@@ -4077,41 +4290,427 @@
                   document.body.appendChild(link);
                   link.click();
                   link.remove();
-                  pdfBtn.textContent = originalLabel;
+                  label.textContent = originalLabel;
                   return;
                 }
               }
             }
           }
         } catch (_) {}
-        pdfBtn.textContent = originalLabel;
+        label.textContent = originalLabel;
         window.print();
       }
 
-      function setMode(stageEnabled) {
-        isStage = stageEnabled;
-        document.body.classList.toggle('stage-mode', isStage);
-        modeBtn.textContent = isStage ? 'Scroll' : 'Stage';
-        showSlide(current, false);
-        if (!isStage) {
-          requestAnimationFrame(syncSlideFromScroll);
+      // 7. Export .PPTX (16:9 Widescreen Deck via PptxGenJS CDN -> Digitan_Visual_Guide.pptx)
+      const PPTX_CDNS = [
+        'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js',
+        'https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs/dist/pptxgen.bundle.js',
+        'https://unpkg.com/pptxgenjs@3.12.0/dist/pptxgen.bundle.js'
+      ];
+
+      function loadScript(src) {
+        return new Promise((resolve, reject) => {
+          const s = document.createElement('script');
+          s.src = src;
+          s.async = true;
+          s.onload = () => resolve();
+          s.onerror = () => reject(new Error(`Failed to load ${src}`));
+          document.head.appendChild(s);
+        });
+      }
+
+      async function ensurePptxGen() {
+        if (typeof window.PptxGenJS === 'function') return window.PptxGenJS;
+        for (const url of PPTX_CDNS) {
+          try {
+            await loadScript(url);
+            if (typeof window.PptxGenJS === 'function') return window.PptxGenJS;
+          } catch (_) {}
+        }
+        throw new Error('PptxGenJS CDN could not be loaded.');
+      }
+
+      function parseCssColor(colorStr) {
+        if (!colorStr || colorStr === 'transparent' || colorStr === 'none') return null;
+        const rgba = colorStr.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)(?:\s*,\s*([\d.]+))?\s*\)/i);
+        if (rgba) {
+          const r = Math.min(255, Math.max(0, Math.round(Number(rgba[1]))));
+          const g = Math.min(255, Math.max(0, Math.round(Number(rgba[2]))));
+          const b = Math.min(255, Math.max(0, Math.round(Number(rgba[3]))));
+          const a = rgba[4] !== undefined ? Math.min(1, Math.max(0, Number(rgba[4]))) : 1;
+          const hex = [r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('').toUpperCase();
+          return { hex, alpha: a };
+        }
+        const hexMatch = colorStr.trim().match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+        if (hexMatch) {
+          let h = hexMatch[1];
+          if (h.length === 3) h = h.split('').map((c) => c + c).join('');
+          return { hex: h.toUpperCase(), alpha: 1 };
+        }
+        return null;
+      }
+
+      function extractGradientColor(bgImage) {
+        if (!bgImage || bgImage === 'none') return null;
+        const match = bgImage.match(/rgba?\([^)]+\)|#[0-9a-f]{3,6}/i);
+        return match ? parseCssColor(match[0]) : null;
+      }
+
+      function extractPrimaryFont(fontFamily) {
+        if (!fontFamily) return 'Plus Jakarta Sans';
+        const first = fontFamily.split(',')[0].replace(/['"]/g, '').trim();
+        return first || 'Plus Jakarta Sans';
+      }
+
+      async function svgToPngDataUrl(svgEl, widthPx, heightPx) {
+        try {
+          const clone = svgEl.cloneNode(true);
+          clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+          const w = Math.max(16, Math.round(widthPx));
+          const h = Math.max(16, Math.round(heightPx));
+          clone.setAttribute('width', String(w));
+          clone.setAttribute('height', String(h));
+          const svgString = new XMLSerializer().serializeToString(clone);
+          const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          try {
+            const img = new Image();
+            await new Promise((resolve, reject) => {
+              img.onload = resolve;
+              img.onerror = reject;
+              img.src = url;
+            });
+            const scale = 2;
+            const canvas = document.createElement('canvas');
+            canvas.width = w * scale;
+            canvas.height = h * scale;
+            const ctx = canvas.getContext('2d');
+            ctx.scale(scale, scale);
+            ctx.drawImage(img, 0, 0, w, h);
+            return canvas.toDataURL('image/png');
+          } finally {
+            URL.revokeObjectURL(url);
+          }
+        } catch (_) {
+          return null;
         }
       }
 
-      function toggleFullscreen() {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen().catch(() => {});
-        } else {
-          document.exitFullscreen().catch(() => {});
+      function imgToPngDataUrl(imgEl) {
+        try {
+          if (!imgEl.complete || !imgEl.naturalWidth) return null;
+          const canvas = document.createElement('canvas');
+          canvas.width = imgEl.naturalWidth;
+          canvas.height = imgEl.naturalHeight;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(imgEl, 0, 0);
+          return canvas.toDataURL('image/png');
+        } catch (_) {
+          return null;
         }
       }
 
-      // Button & Keyboard Listeners
-      document.getElementById('hud-prev').addEventListener('click', () => showSlide(current - 1));
-      document.getElementById('hud-next').addEventListener('click', () => showSlide(current + 1));
-      pdfBtn.addEventListener('click', saveAsPdf);
-      document.getElementById('hud-fs').addEventListener('click', toggleFullscreen);
+      function hasBoxVisual(cs) {
+        const bg = parseCssColor(cs.backgroundColor);
+        const hasBg = (bg && bg.alpha > 0.03) || (cs.backgroundImage && cs.backgroundImage !== 'none');
+        const borders = [
+          { w: parseFloat(cs.borderTopWidth) || 0, c: parseCssColor(cs.borderTopColor) },
+          { w: parseFloat(cs.borderRightWidth) || 0, c: parseCssColor(cs.borderRightColor) },
+          { w: parseFloat(cs.borderBottomWidth) || 0, c: parseCssColor(cs.borderBottomColor) },
+          { w: parseFloat(cs.borderLeftWidth) || 0, c: parseCssColor(cs.borderLeftColor) }
+        ];
+        const hasBorder = borders.some((b) => b.w >= 0.5 && b.c && b.c.alpha > 0.05);
+        return hasBg || hasBorder;
+      }
+
+      function getBorderSpec(cs) {
+        const sides = [
+          { w: parseFloat(cs.borderTopWidth) || 0, c: parseCssColor(cs.borderTopColor) },
+          { w: parseFloat(cs.borderRightWidth) || 0, c: parseCssColor(cs.borderRightColor) },
+          { w: parseFloat(cs.borderBottomWidth) || 0, c: parseCssColor(cs.borderBottomColor) },
+          { w: parseFloat(cs.borderLeftWidth) || 0, c: parseCssColor(cs.borderLeftColor) }
+        ].filter((s) => s.w >= 0.5 && s.c && s.c.alpha > 0.05);
+        if (!sides.length) return null;
+        sides.sort((a, b) => b.w - a.w);
+        return {
+          color: sides[0].c.hex,
+          pt: Math.max(0.5, Math.round(sides[0].w * 0.75 * 10) / 10),
+          transparency: Math.round((1 - sides[0].c.alpha) * 100)
+        };
+      }
+
+      const INLINE_TAGS = new Set(['SPAN', 'STRONG', 'B', 'EM', 'I', 'U', 'A', 'CODE', 'BR', 'SMALL', 'SUB', 'SUP']);
+
+      function canEmitAsSingleTextBlock(el) {
+        if (!el.children.length) return true;
+        for (const child of el.children) {
+          if (!INLINE_TAGS.has(child.tagName)) return false;
+          if (child.tagName !== 'BR' && child.tagName !== 'I') {
+            const ccs = getComputedStyle(child);
+            if (hasBoxVisual(ccs)) return false;
+          }
+        }
+        return true;
+      }
+
+      function collectInlineRuns(el, inheritedCs) {
+        const runs = [];
+        for (const node of el.childNodes) {
+          if (node.nodeType === Node.TEXT_NODE) {
+            const text = node.textContent.replace(/\s+/g, ' ');
+            if (!text.trim() && !runs.length) continue;
+            const c = parseCssColor(inheritedCs.color);
+            const weight = parseInt(inheritedCs.fontWeight, 10);
+            runs.push({
+              text,
+              options: {
+                fontFace: extractPrimaryFont(inheritedCs.fontFamily),
+                fontSize: Math.max(7, Math.round(parseFloat(inheritedCs.fontSize) * 0.75 * 10) / 10),
+                color: c ? c.hex : '0F172A',
+                bold: (!Number.isNaN(weight) && weight >= 600) || inheritedCs.fontWeight === 'bold',
+                italic: inheritedCs.fontStyle === 'italic'
+              }
+            });
+          } else if (node.nodeType === Node.ELEMENT_NODE) {
+            if (node.tagName === 'BR') {
+              runs.push({ text: '\n', options: {} });
+            } else if (node.tagName === 'I' && node.className && node.className.includes('fa-')) {
+              continue;
+            } else {
+              runs.push(...collectInlineRuns(node, getComputedStyle(node)));
+            }
+          }
+        }
+        if (runs.length) {
+          runs[0].text = runs[0].text.replace(/^\s+/, '');
+          runs[runs.length - 1].text = runs[runs.length - 1].text.replace(/\s+$/, '');
+        }
+        return runs.filter((r) => r.text.length > 0);
+      }
+
+      async function exportPptx() {
+        if (isExportingPptx) return;
+        isExportingPptx = true;
+        pptxBtn.disabled = true;
+        const label = pptxBtn.querySelector('.hud-label');
+        const originalLabel = label.textContent;
+        label.textContent = 'Loading...';
+
+        let measureHost = null;
+        try {
+          const PptxGen = await ensurePptxGen();
+          const pptx = new PptxGen();
+          pptx.defineLayout({ name: 'DIGITAN_16_9', width: 13.333333, height: 7.5 });
+          pptx.layout = 'DIGITAN_16_9';
+          pptx.title = 'Digitan’s Guide to Luminous Gradients & Architectural Shapes';
+          pptx.author = 'Digitan';
+
+          measureHost = document.createElement('div');
+          measureHost.id = 'pptx-measure-host';
+          document.body.appendChild(measureHost);
+
+          const PX_TO_IN = 1 / 96;
+
+          for (let i = 0; i < slides.length; i++) {
+            label.textContent = `${pad2(i + 1)}/${pad2(slides.length)}`;
+            measureHost.innerHTML = '';
+            const clone = slides[i].cloneNode(true);
+            clone.classList.add('active-slide');
+            clone.style.transform = '';
+            measureHost.appendChild(clone);
+
+            const slideRect = clone.getBoundingClientRect();
+            const slideCs = getComputedStyle(clone);
+            const slideBg = parseCssColor(slideCs.backgroundColor);
+            const slideGrad = extractGradientColor(slideCs.backgroundImage);
+            const pSlide = pptx.addSlide();
+            pSlide.background = {
+              color: (slideBg && slideBg.alpha > 0.05) ? slideBg.hex : (slideGrad ? slideGrad.hex : 'FFFFFF')
+            };
+
+            const walkNode = async (el) => {
+              if (!el || el.nodeType !== Node.ELEMENT_NODE) return;
+              const cs = getComputedStyle(el);
+              if (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) <= 0.02) return;
+
+              const rect = el.getBoundingClientRect();
+              const relX = rect.left - slideRect.left;
+              const relY = rect.top - slideRect.top;
+              const isRoot = el === clone;
+
+              if (!isRoot && (rect.width < 1 || rect.height < 1)) return;
+              if (!isRoot && (relX + rect.width <= 0 || relY + rect.height <= 0 || relX >= 1280 || relY >= 720)) return;
+
+              const boxX = Math.max(0, relX) * PX_TO_IN;
+              const boxY = Math.max(0, relY) * PX_TO_IN;
+              const boxW = Math.min(1280 - Math.max(0, relX), rect.width - Math.max(0, -relX)) * PX_TO_IN;
+              const boxH = Math.min(720 - Math.max(0, relY), rect.height - Math.max(0, -relY)) * PX_TO_IN;
+              if (!isRoot && (boxW <= 0.01 || boxH <= 0.01)) return;
+
+              // Skip FontAwesome glyph elements cleanly
+              if (el.tagName === 'I' && el.className && el.className.includes('fa-')) return;
+
+              // Rasterize inline SVG diagrams/charts
+              if (el.tagName && el.tagName.toLowerCase() === 'svg') {
+                const png = await svgToPngDataUrl(el, rect.width, rect.height);
+                if (png) {
+                  pSlide.addImage({
+                    data: png,
+                    x: relX * PX_TO_IN,
+                    y: relY * PX_TO_IN,
+                    w: rect.width * PX_TO_IN,
+                    h: rect.height * PX_TO_IN
+                  });
+                }
+                return;
+              }
+
+              // Embed images (gracefully handle cross-origin images without CORS)
+              if (el.tagName === 'IMG') {
+                const png = imgToPngDataUrl(el);
+                if (png) {
+                  pSlide.addImage({
+                    data: png,
+                    x: boxX,
+                    y: boxY,
+                    w: boxW,
+                    h: boxH,
+                    sizing: { type: 'contain', w: boxW, h: boxH }
+                  });
+                } else {
+                  pSlide.addShape(pptx.ShapeType.roundRect, {
+                    x: boxX,
+                    y: boxY,
+                    w: boxW,
+                    h: boxH,
+                    rectRadius: 0.08,
+                    fill: { color: '1E293B', transparency: 15 },
+                    line: { color: '475569', width: 0.75 }
+                  });
+                }
+                return;
+              }
+
+              // Draw container / card / badge shape
+              if (!isRoot && hasBoxVisual(cs)) {
+                const bg = parseCssColor(cs.backgroundColor);
+                const grad = extractGradientColor(cs.backgroundImage);
+                const fillCol = (bg && bg.alpha > 0.03) ? bg : grad;
+                const border = getBorderSpec(cs);
+                const radiusPx = parseFloat(cs.borderTopLeftRadius) || 0;
+                const minSide = Math.min(rect.width, rect.height);
+                const isCircle = radiusPx >= minSide * 0.45 && Math.abs(rect.width - rect.height) < 6;
+                const shapeType = isCircle
+                  ? pptx.ShapeType.ellipse
+                  : (radiusPx > 1 ? pptx.ShapeType.roundRect : pptx.ShapeType.rect);
+
+                const shapeOpts = { x: boxX, y: boxY, w: boxW, h: boxH };
+                if (shapeType === pptx.ShapeType.roundRect) {
+                  shapeOpts.rectRadius = Math.min(0.5, Math.round((radiusPx / Math.max(1, minSide)) * 100) / 100);
+                }
+                if (fillCol) {
+                  const elemOpacity = parseFloat(cs.opacity);
+                  const effAlpha = fillCol.alpha * (Number.isNaN(elemOpacity) ? 1 : elemOpacity);
+                  shapeOpts.fill = {
+                    color: fillCol.hex,
+                    transparency: Math.min(98, Math.max(0, Math.round((1 - effAlpha) * 100)))
+                  };
+                }
+                if (border) {
+                  shapeOpts.line = {
+                    color: border.color,
+                    width: border.pt,
+                    transparency: border.transparency
+                  };
+                }
+                pSlide.addShape(shapeType, shapeOpts);
+              }
+
+              // Emit text or recurse into child elements
+              const hasDirectText = Array.from(el.childNodes).some(
+                (n) => n.nodeType === Node.TEXT_NODE && n.textContent.trim().length > 0
+              );
+              if (el.children.length === 0 || (canEmitAsSingleTextBlock(el) && (hasDirectText || el.innerText.trim().length > 0))) {
+                const runs = collectInlineRuns(el, cs);
+                if (runs.length) {
+                  const padL = parseFloat(cs.paddingLeft) || 0;
+                  const padR = parseFloat(cs.paddingRight) || 0;
+                  const padT = parseFloat(cs.paddingTop) || 0;
+                  const padB = parseFloat(cs.paddingBottom) || 0;
+                  const tx = Math.max(0, relX + padL) * PX_TO_IN;
+                  const ty = Math.max(0, relY + padT) * PX_TO_IN;
+                  const tw = Math.max(0.25, (rect.width - padL - padR) * PX_TO_IN + 0.06);
+                  const th = Math.max(0.16, (rect.height - padT - padB) * PX_TO_IN + 0.04);
+                  const align = cs.textAlign === 'center' ? 'center' : cs.textAlign === 'right' ? 'right' : 'left';
+                  pSlide.addText(runs, {
+                    x: tx,
+                    y: ty,
+                    w: Math.min(13.333333 - tx, tw),
+                    h: Math.min(7.5 - ty, th),
+                    align,
+                    valign: 'top',
+                    margin: 0,
+                    wrap: true
+                  });
+                }
+                return;
+              }
+
+              // Mixed container (e.g. cover headline with inline badge pill + text nodes)
+              for (const child of el.childNodes) {
+                if (child.nodeType === Node.TEXT_NODE) {
+                  const txt = child.textContent.replace(/\s+/g, ' ').trim();
+                  if (!txt) continue;
+                  const range = document.createRange();
+                  range.selectNodeContents(child);
+                  const r = range.getBoundingClientRect();
+                  if (r.width < 1 || r.height < 1) continue;
+                  const c = parseCssColor(cs.color);
+                  const weight = parseInt(cs.fontWeight, 10);
+                  pSlide.addText(txt, {
+                    x: Math.max(0, r.left - slideRect.left) * PX_TO_IN,
+                    y: Math.max(0, r.top - slideRect.top) * PX_TO_IN,
+                    w: Math.min(13.333333, r.width * PX_TO_IN + 0.08),
+                    h: Math.min(7.5, r.height * PX_TO_IN + 0.04),
+                    fontFace: extractPrimaryFont(cs.fontFamily),
+                    fontSize: Math.max(7, Math.round(parseFloat(cs.fontSize) * 0.75 * 10) / 10),
+                    color: c ? c.hex : '0F172A',
+                    bold: (!Number.isNaN(weight) && weight >= 600) || cs.fontWeight === 'bold',
+                    italic: cs.fontStyle === 'italic',
+                    valign: 'top',
+                    margin: 0
+                  });
+                } else if (child.nodeType === Node.ELEMENT_NODE) {
+                  await walkNode(child);
+                }
+              }
+            };
+
+            await walkNode(clone);
+          }
+
+          label.textContent = 'Saving...';
+          await pptx.writeFile({ fileName: 'Digitan_Visual_Guide.pptx' });
+        } catch (err) {
+          console.error('PPTX export error:', err);
+          alert('Unable to export .PPTX right now. Please check your network connection for PptxGenJS CDN.');
+        } finally {
+          if (measureHost && measureHost.parentNode) measureHost.remove();
+          isExportingPptx = false;
+          pptxBtn.disabled = false;
+          label.textContent = originalLabel;
+          scheduleIdle(2500);
+        }
+      }
+
+      // 8. Button & Keyboard Listeners
+      prevBtn.addEventListener('click', () => showSlide(current - 1));
+      nextBtn.addEventListener('click', () => showSlide(current + 1));
+      presentBtn.addEventListener('click', togglePresentation);
       modeBtn.addEventListener('click', () => setMode(!isStage));
+      themeBtn.addEventListener('click', () => applyTheme(!isLightTheme));
+      pptxBtn.addEventListener('click', exportPptx);
+      pdfBtn.addEventListener('click', saveAsPdf);
 
       window.addEventListener('keydown', (e) => {
         if (e.target && e.target.isContentEditable) return;
@@ -4132,13 +4731,18 @@
           e.preventDefault();
           showSlide(slides.length - 1);
         } else if (e.key === 'f' || e.key === 'F') {
-          toggleFullscreen();
+          e.preventDefault();
+          togglePresentation();
         } else if (e.key === 'm' || e.key === 'M') {
+          e.preventDefault();
           setMode(!isStage);
+        } else if (e.key === 't' || e.key === 'T') {
+          e.preventDefault();
+          applyTheme(!isLightTheme);
         }
       });
 
-      // Touch Swipe Navigation in Stage Mode
+      // Touch Swipe Navigation in Single Slide / Present Mode
       let touchStartX = 0;
       window.addEventListener('touchstart', (e) => {
         touchStartX = e.changedTouches[0].screenX;
@@ -4154,13 +4758,21 @@
 
       window.addEventListener('resize', scaleActiveSlide);
 
-      // Initialize from URL hash if present
+      // Initialize Theme, URL Hash, Mode & Auto-Hide
+      try {
+        const savedTheme = localStorage.getItem('digitan-deck-theme');
+        applyTheme(savedTheme === 'light', false);
+      } catch (_) {
+        applyTheme(false, false);
+      }
+
       const hashMatch = window.location.hash.match(/^#slide-(\d+)$/);
       if (hashMatch) {
         const target = parseInt(hashMatch[1], 10) - 1;
         if (target >= 0 && target < slides.length) current = target;
       }
 
+      updatePresentButton();
       setMode(true);
       scheduleIdle(2500);
     })();
