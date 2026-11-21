@@ -1,21 +1,26 @@
-name: Stamp Timestamp & Build PDF
+name: Build Deck & Export PDF/PPTX
 
 on:
   push:
     branches: [main]
     paths:
-      - 'index.html'
+      - 'slides/**'
+      - 'src/**'
       - 'assets/**'
+      - 'scripts/**'
+      - 'package.json'
+      - '.github/workflows/**'
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: build-presentation-pdf
+  group: build-presentation-artifacts
   cancel-in-progress: false
 
 jobs:
-  build-pdf:
+  build-and-export:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -31,16 +36,19 @@ jobs:
           npm install --no-save playwright
           npx playwright install chromium --with-deps
 
-      - name: Stamp Cover Timestamps & Export PDF
+      - name: Build index.html, Stamp Timestamps & Export PDF/PPTX
         run: |
           COMMIT_ISO=$(git log -1 --format=%cI)
           DISPLAY_TS=$(TZ='Asia/Jakarta' date -d "$COMMIT_ISO" +"%b %d, %Y · %H:%M WIB" | tr '[:lower:]' '[:upper:]')
           FILE_TS=$(TZ='Asia/Jakarta' date -d "$COMMIT_ISO" +"%Y%m%d-%H%MWIB")
 
           echo "Cover Stamp: LAST UPDATED: $DISPLAY_TS"
-          echo "PDF Output:  exports/Digitan-Guide-${FILE_TS}.pdf"
+          echo "Artifact TS: $FILE_TS"
 
-          # 1. Update front and back cover timestamps in index.html
+          # 1. Assemble unified index.html from slides/*.html, src/shell.html, and assets/*
+          node scripts/build-deck.mjs
+
+          # 2. Stamp front and back cover timestamps in assembled index.html
           DISPLAY_TS="$DISPLAY_TS" node -e '
             const fs = require("fs");
             const ts = process.env.DISPLAY_TS;
@@ -49,31 +57,13 @@ jobs:
             fs.writeFileSync("index.html", html, "utf8");
           '
 
-          # 2. Render exact 1280x720 PDF with updated cover timestamp
-          mkdir -p exports
-          rm -f exports/Digitan-Guide-*.pdf
-          PDF_PATH="exports/Digitan-Guide-${FILE_TS}.pdf" node -e '
-            const { chromium } = require("playwright");
-            const path = require("path");
-            (async () => {
-              const browser = await chromium.launch();
-              const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
-              await page.goto("file://" + path.resolve("index.html"), { waitUntil: "networkidle" });
-              await page.pdf({
-                path: process.env.PDF_PATH,
-                width: "1280px",
-                height: "720px",
-                printBackground: true,
-                margin: { top: "0px", right: "0px", bottom: "0px", left: "0px" }
-              });
-              await browser.close();
-            })();
-          '
+          # 3. Export PDF + Dark & Light PPTX via Playwright & HtmlSlideConverter over localhost
+          FILE_TS="$FILE_TS" node scripts/export-artifacts.mjs
 
-      - name: Commit stamped HTML and PDF
+      - name: Commit Built Deck & Export Artifacts
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add index.html exports/
-          git diff --staged --quiet || git commit -m "chore: update cover timestamp and export PDF"
+          git diff --staged --quiet || git commit -m "chore: build deck and export PDF/PPTX artifacts"
           git push

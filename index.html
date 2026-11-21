@@ -6,377 +6,21 @@
   <title>Digitan’s Guide to Luminous Gradients &amp; Architectural Shapes</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: #05080f;
-      transition: background-color 0.25s ease;
-    }
-    .slide-container {
-      width: 1280px;
-      height: 720px;
-      margin: 0 auto;
-      overflow: hidden;
-      box-sizing: border-box;
-    }
-
-    /* --- Scroll All Mode Spacing --- */
-    body:not(.stage-mode) {
-      padding: 24px 0 92px;
-    }
-    body:not(.stage-mode) .slide-container {
-      margin: 0 auto 24px auto !important;
-      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
-    }
-    body:not(.stage-mode) .slide-container:last-of-type {
-      margin-bottom: 0 !important;
-    }
-
-    /* --- Single Slide / Presentation Stage Mode --- */
-    body.stage-mode {
-      background: #05080f !important;
-      overflow: hidden !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-    body.stage-mode .slide-container:not(.active-slide) {
-      display: none !important;
-    }
-    body.stage-mode .slide-container.active-slide {
-      display: flex !important;
-      position: fixed !important;
-      top: 50% !important;
-      left: 50% !important;
-      margin: 0 !important;
-      transform-origin: center center !important;
-      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.75) !important;
-      z-index: 10 !important;
-    }
-
-    /* --- Light Theme (Outer Backdrop & Cover Slides #slide1 / #slide15 Only; Slides 02-29 Untouched) --- */
-    body.theme-light,
-    body.theme-light.stage-mode {
-      background: #e2e8f0 !important;
-    }
-    body.theme-light:not(.stage-mode) .slide-container {
-      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.14);
-    }
-    body.theme-light.stage-mode .slide-container.active-slide {
-      box-shadow: 0 24px 64px rgba(15, 23, 42, 0.18) !important;
-    }
-    body.theme-light #slide1,
-    body.theme-light #slide15 {
-      background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 58%, #e2e8f0 100%) !important;
-    }
-    body.theme-light #slide1 > div:first-child p:nth-of-type(1),
-    body.theme-light #slide15 > div:first-child p:nth-of-type(1) {
-      color: #4f46e5 !important;
-    }
-    body.theme-light #slide1 > div:first-child p:nth-of-type(2),
-    body.theme-light #slide15 > div:first-child p:nth-of-type(2) {
-      color: #db2777 !important;
-    }
-    body.theme-light #slide1 h1,
-    body.theme-light #slide15 h2 {
-      color: #0f172a !important;
-    }
-    body.theme-light #slide1 > div:first-child > div:first-child > p {
-      color: #475569 !important;
-    }
-    body.theme-light #slide1 > div:first-child > div:last-child,
-    body.theme-light #slide15 > div:first-child > div:last-child {
-      border-top-color: #cbd5e1 !important;
-    }
-    body.theme-light #slide1 > div:first-child > div:last-child > span:first-child,
-    body.theme-light #slide15 > div:first-child > div:last-child > span:first-child {
-      color: #4f46e5 !important;
-    }
-    body.theme-light #slide1 > div:first-child > div:last-child > span:last-child,
-    body.theme-light #slide15 > div:first-child > div:last-child > span:last-child {
-      color: #64748b !important;
-    }
-    body.theme-light #slide1 > div:last-child,
-    body.theme-light #slide15 > div:last-child {
-      background: radial-gradient(circle at center, rgba(99, 102, 241, 0.14) 0%, rgba(241, 245, 249, 0.96) 85%) !important;
-    }
-    body.theme-light #slide1 > div:last-child > div,
-    body.theme-light #slide15 > div:last-child > div {
-      opacity: 0.48 !important;
-      filter: blur(1px) brightness(0.98) !important;
-    }
-
-    /* --- Floating Presentation Toolbar & Bottom-Right Hit Zone --- */
-    #deck-hud-zone {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 9999;
-      padding: 28px 24px 18px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      max-width: 100vw;
-    }
-    #deck-hud {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      padding: 6px 8px;
-      border-radius: 9999px;
-      background: rgba(15, 23, 42, 0.88);
-      backdrop-filter: blur(16px) saturate(160%);
-      -webkit-backdrop-filter: blur(16px) saturate(160%);
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 12px;
-      font-weight: 700;
-      color: #f8fafc;
-      opacity: 1;
-      transition: opacity 0.35s ease, background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-    }
-    #deck-hud.hud-idle {
-      opacity: 0.15;
-    }
-    @media (hover: hover) and (pointer: fine) {
-      #deck-hud-zone:hover #deck-hud {
-        opacity: 1 !important;
-      }
-    }
-    #deck-hud .hud-sep {
-      width: 1px;
-      height: 18px;
-      background: rgba(148, 163, 184, 0.24);
-      margin: 0 2px;
-      flex-shrink: 0;
-    }
-    #deck-hud .hud-btn {
-      height: 30px;
-      padding: 0 11px;
-      border-radius: 9999px;
-      border: 1px solid rgba(148, 163, 184, 0.22);
-      background: rgba(30, 41, 59, 0.92);
-      color: #e2e8f0;
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      cursor: pointer;
-      white-space: nowrap;
-      user-select: none;
-      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
-    }
-    #deck-hud .hud-btn:hover:not(:disabled) {
-      background: #6366f1;
-      border-color: #818cf8;
-      color: #ffffff;
-    }
-    #deck-hud .hud-btn.is-active {
-      background: #4f46e5;
-      border-color: #818cf8;
-      color: #ffffff;
-    }
-    #deck-hud .hud-btn:disabled {
-      opacity: 0.42;
-      cursor: default;
-    }
-    #deck-hud .hud-btn-pptx {
-      background: rgba(234, 88, 12, 0.22);
-      border-color: rgba(251, 146, 60, 0.42);
-      color: #fed7aa;
-    }
-    #deck-hud .hud-btn-pptx:hover:not(:disabled) {
-      background: #ea580c;
-      border-color: #fb923c;
-      color: #ffffff;
-    }
-    #deck-hud .hud-btn-pdf {
-      background: rgba(79, 70, 229, 0.26);
-      border-color: rgba(129, 140, 248, 0.45);
-      color: #c7d2fe;
-    }
-    #deck-hud .hud-btn-pdf:hover:not(:disabled) {
-      background: #4f46e5;
-      border-color: #818cf8;
-      color: #ffffff;
-    }
-    #deck-counter {
-      padding: 0 8px;
-      color: #fde047;
-      letter-spacing: 0.5px;
-      font-variant-numeric: tabular-nums;
-      user-select: none;
-      white-space: nowrap;
-    }
-
-    /* Light Theme Toolbar Palette */
-    body.theme-light #deck-hud {
-      background: rgba(255, 255, 255, 0.92);
-      border-color: rgba(15, 23, 42, 0.12);
-      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-      color: #0f172a;
-    }
-    body.theme-light #deck-hud .hud-sep {
-      background: rgba(15, 23, 42, 0.14);
-    }
-    body.theme-light #deck-hud .hud-btn {
-      background: rgba(241, 245, 249, 0.95);
-      border-color: rgba(15, 23, 42, 0.12);
-      color: #1e293b;
-    }
-    body.theme-light #deck-hud .hud-btn:hover:not(:disabled),
-    body.theme-light #deck-hud .hud-btn.is-active {
-      background: #4f46e5;
-      border-color: #4f46e5;
-      color: #ffffff;
-    }
-    body.theme-light #deck-hud .hud-btn-pptx {
-      background: rgba(234, 88, 12, 0.12);
-      border-color: rgba(234, 88, 12, 0.32);
-      color: #c2410c;
-    }
-    body.theme-light #deck-hud .hud-btn-pptx:hover:not(:disabled) {
-      background: #ea580c;
-      border-color: #ea580c;
-      color: #ffffff;
-    }
-    body.theme-light #deck-hud .hud-btn-pdf {
-      background: rgba(79, 70, 229, 0.12);
-      border-color: rgba(79, 70, 229, 0.32);
-      color: #4338ca;
-    }
-    body.theme-light #deck-hud .hud-btn-pdf:hover:not(:disabled) {
-      background: #4f46e5;
-      border-color: #4f46e5;
-      color: #ffffff;
-    }
-    body.theme-light #deck-counter {
-      color: #4f46e5;
-    }
-
-    @media (max-width: 767px) {
-      #deck-hud-zone {
-        left: 0;
-        right: 0;
-        transform: none;
-        justify-content: center;
-        padding: 18px 10px 12px;
-      }
-      #deck-hud {
-        flex-wrap: wrap;
-        justify-content: center;
-        max-width: calc(100vw - 20px);
-        border-radius: 20px;
-        padding: 6px 8px;
-        gap: 4px;
-      }
-      #deck-hud .hud-sep {
-        display: none;
-      }
-      #deck-hud .hud-btn {
-        height: 28px;
-        padding: 0 9px;
-        font-size: 11px;
-        gap: 5px;
-      }
-      #deck-counter {
-        padding: 0 6px;
-        font-size: 11px;
-      }
-    }
-
-    /* Offscreen PPTX Measurement Host */
-    #pptx-measure-host {
-      position: fixed;
-      left: -20000px;
-      top: 0;
-      width: 1280px;
-      height: 720px;
-      overflow: hidden;
-      pointer-events: none;
-      z-index: -1;
-    }
-    #pptx-measure-host .slide-container {
-      display: flex !important;
-      position: static !important;
-      top: auto !important;
-      left: auto !important;
-      transform: none !important;
-      margin: 0 !important;
-      box-shadow: none !important;
-      width: 1280px !important;
-      height: 720px !important;
-    }
-
-    /* --- Exact 1280x720 PDF / Print Overrides --- */
-    @media print {
-      @page {
-        size: 1280px 720px;
-        margin: 0;
-      }
-      html, body, body.stage-mode, body.theme-light, body.theme-light.stage-mode {
-        width: 1280px !important;
-        height: auto !important;
-        overflow: visible !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: transparent !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-      .slide-container,
-      body:not(.stage-mode) .slide-container,
-      body.stage-mode .slide-container,
-      body.stage-mode .slide-container:not(.active-slide),
-      body.stage-mode .slide-container.active-slide {
-        display: flex !important;
-        position: static !important;
-        top: auto !important;
-        left: auto !important;
-        transform: none !important;
-        width: 1280px !important;
-        height: 720px !important;
-        margin: 0 !important;
-        box-shadow: none !important;
-        page-break-after: always !important;
-        break-after: page !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-      .slide-container:last-of-type {
-        page-break-after: auto !important;
-        break-after: auto !important;
-      }
-      #deck-hud-zone,
-      #deck-hud,
-      #pptx-measure-host {
-        display: none !important;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script defer src="https://ramadhanaraz.github.io/extended-pptxjs/dist/extended-pptxjs.bundle.js"></script>
+  <script defer src="assets/js/exporter.js"></script>
+  <script defer src="assets/js/navigation.js"></script>
 </head>
 <body>
-
   <!-- SLIDE 01: Front Cover (Vertically Centered Title + Digitan Petit Chibi + Ver 1.0) -->
-  <div class="slide-container" id="slide1" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:linear-gradient(135deg, #070b14 0%, #0d1324 60%, #111827 100%);display:flex;align-items:stretch;justify-content:space-between;">
+  <section class="slide" id="slide1" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:linear-gradient(135deg, #070b14 0%, #0d1324 60%, #111827 100%);display:flex;align-items:stretch;justify-content:space-between;">
     <!-- Left Foreground Typography & Footer Metadata -->
     <div style="width:710px;padding:44px 24px 44px 64px;display:flex;flex-direction:column;justify-content:space-between;">
       <div style="flex-grow:1;display:flex;flex-direction:column;justify-content:center;">
         <!-- Digitan Static Petit Chibi Guide Header (Borderless Transparent PNG) -->
         <div style="display:flex;align-items:center;gap:16px;margin:0 0 22px 0;">
           <div style="width:92px;height:92px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <img src="https://media.gametora.com/umamusume/characters/chibi/101901_0011.png" alt="Digitan petit chibi mascot" style="width:100%;height:100%;object-fit:contain;">
+            <img src="assets/digitan-chibi.png" alt="Digitan petit chibi mascot" style="width:100%;height:100%;object-fit:contain;" data-fallback-src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAMAAABrrFhUAAAC31BMVEVMaXFcHzxfIDtZHz5ZH0BZH0BaHz5ZHz9ZH0BaHz9ZHz1DIUv859bXgH/vopxaH0LsoJrWfHv/59bwp53/797ehoT4zIXfi4VaHTnNdnPwr6XSeXnvnpX49JzWgoT4saX5+abvqqTso5veiIzxsqfZhoPKb27djotXID/qmpX3qqW1S0nvn5z//fPnlZP/4dD/8+e0VVX//v/EammvQ0H/+OuOPEnwoZn/2cb3vazAYmCrUFbxmZP/6tq8WluEOEm2YGTik4v70sdjHjr57J2SQk/45Jf3x4PXgnv97un/wrbt8fzz6PykSU6qagz6076tSErECwvNf33ltKn++7D+2dD3tK3a0eLGZmOWSld4L0T1/P2zBgbspKC4UVKAJTGYOD7+05X52aDnnZX42Ix9DgnnkY7egntsHTXj5ftwJzjkmJD24tPxrqGhWVDSn5XDssb+zG7jq6Tlop389sX1yL6gQUWUBAipNjfrsJSqj7CnRgXyv5zUp57EiTS8ejrabmWOFBv49fefYGf8/dm4dhXfe3bNdWrKXlfkt7PPUU1zDAT594SvaFXQ2viJQRGYZDrDm6bNkolkHCn3xnZqBwSzosfy38foyILkvG+YWRDCv+3NolT2pqZzNyzf0sjioYL6ppn/S1H60un+sbLakXXLraLwhXnvva6qqaGXi7fhq2KbMyris5irFhVXFyq+eW/h0vzDorWqeYdrLUbNvtHUp6+7jVbawJJTrJvVNS3Cc0uvXyjqwLjNlkIoCAJlV1MEAQDVr2Tdp3Do7evUwrfN+fzs2NkYCABrpKoQBAL2Gxz33m6zgkaKtKKo6v7jyZ+dstXyxNSulYzZwHeDYH8Iw8hEosKl0OzzVVKlzbIJpqxMwN1txeBSgoTgn6bmZVgYDQkPl424PjlZREGMX05bza7n05ko+9977vCEkZmj75lT+OvS9bgD+/H4hrIYAAB/l2r7qePioPkYXYSAE0jFAAAADHRSTlMAxaU0bEnbtiKRfv0mMDNyAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAgAElEQVR42uydeXxU9dX/37PfmUwySYAsZCEhyxDCkiDIKptElgCyWEFRa7XWp5Wn1ba2iq2PT61giwt9KtX+3Flai4KIBMUAsoc9YQkwWQjJZCF7MhlmJrP+/rh3JhPABRuNz+vhi6+Xk3vv3Lnf8z3nfM/yOefCjXFj3Bg3xo1xY9wYN8aNcWPcGDfGjXFj3Bg3xo1xY9wYN8aNcWPcGDfGjXFj/J8Yst78cZXKo7D93yWAUvEC8Cufq1cJoOyl3xVknkjwoNBy2f1/jwNUcl8kyy0w4oTvmd6lgKxXpp8Mv7Fw+ZYj3PzClN6lwHdPAMEX8VvAFp375r/oYGs+PGPrPT0g//cnpDForkOTaMIjgIkZD1x688HphPJMDhN7UxXL/v35Azjk9q+nc+WRLE+MaNxB+IOw/tJ2jDyTb3jMae8tAij+3fl7VS87fhR3TuHUfrUgC4qUiKd/ZNhbeAGEwhE8PDWmvC+776nJV8jc/0s5QPM8TGwwg5IHha9YRpXsRTy66jXg+QWOTQuEz2DioSgMA1D8xv6/UwdoBZi44nhiAvDmarX2S6/VvYiHcWvAw1/+IizY5ACKGGVoHwaO/51KUKWGiSvg2PHEGkCr1qi+WFeo8XhGuGcHDizYFEbYE7l57XwM/6P8X0kAGc+gAUaOPCarrWHlEkGnEa5NKq/ASkYcCRw4hEAWFo4yygAeQoSv1J/K750O0P0Jz4T3tmMcwyET0c/L9sKfaL+GOCtDnoGJ80YfDhwxQrgjagRj3qtrHJYq53FH55fqz85oaHF+zzjAjUe/DKaP4dAFonlvYc5EnsAQYALB/0EbAuQsDJo/QBs64BT9KEsAQfVl+kMTjdE4UPX9IoDyRcgatp1TkEU0FDF74USeIMIrPqhGo9EIkvivJGc2h4O2XXk485IunmAZscBOnvkSv0yrVmNMcZv+7U27hwngwaMHpsOhTQukYwsrW55gYIoS0CaPHCn4BASfwMqtObOl7xjFC8P2nsJGwwk4FctFvCF4vojOMrV2/Xx3DlxwfK90gJD0S8Y9qiGa6vmN+znnt6zeWjV1AEtsyr78FniiUyM8w8SFI9vAFGR5pc/lD795JZRYQEX0iPbYx6zXIoHKHc30FlRtQ1286vtecYDfdjNAI/75Aw/kUsl6bV+Wt7WBoBVg4kKk+ZOenp4OTJv7hy2aV5YuYtiXPotS0yeaoS2Un/+2PLd/gwAquOlRmI0B+i3PyACFuLwr3FRiYLmFW9tAzcqJC4FwjBkZ06cnJs4FpmVt0ZwD3mA7LJdsg27rKwgqpVYdIjB0aKWqXDI7v18E8Ir/Owrz+RCZbPD09FSJw91UstzSEr4zlJdZ2bgQwHLqlExmNpO1pSR9GlvOAbyydBEs7zZvlVKn1WjUg5KSUlLV2vXGoZWVUecB+oLr+xUSE+oaC9fOjSaFPDLXF5Jtlp2ay8UyOASDHyyfTOGpsQs3P3PTipG0JZnJLiwEoATYgQLSKRI++8F+2Dhx7+AQy8sPyn3RLJBIawdi2d9mtDYmA7HVZw3fMxEQWALACP+BwsJCzOZTtmmpwJ1M3s0PxhaQg4a28HlZhYWFMJenE3bAuR1A+rSiuU9TAsuWQdanI+DNqGj/veLiUlNTUzeVlg4tS9UBntKecF17lgN8pNlypc+5JX4iAFvY9QwbJjP5lfE/2PvLZ3Pyn3k0q0g8veXpP+gAo4npW4qK5m4BGHYKCOOIEoYCsRgop4nTQIpNd1pgOBBfelcBf/f1CgG0A6j0Xb0BqwRCQplL7tERCoBsafriGBxfU3pmfsN/4so/8GT+vM3zigCeZsuwMsCUkUgWJTuAdMJgxqWwLEacoAW0BUCI39Q+zVAdgKc0rcCAYO8VX8AA2haZ90oFpHmvklWE8kMOXVggwGcUkS2dS5helFVBn/qFDzImqqBuQfgGkX0TtivErd5YhmT3/OLQhYGHIRzjtOboFQ0KQww1pAHHidaHXmrt7AM5+jXctzc971uJHMq/WtR52BgZ0eeKuJ/iPdDzYzogizd45ZWSEt0wT0ICQAJFyjPEkvAgbz4UxYJNjAdI8OyQ5o/J45E+/eUwWcAi2EE90C4evnAhOkZ/+VxrJ5CTvwYmDslzuHrFHXY4wBJrRAhRa4N8EQ2VZPEv4NCmBUtfgdTU1LKyHTs8vgSYzhB3H9SMGfMg3F6wYFDceBI8O8o8nmsE4xZsAoqAaBqiAOK4cAGnHqsvAiCHkfDG5g+/0FT+tncBOYe53RJrXK9Vp6i1KgFBEBQqD+iBRUulp6esrAxSKSvZYaJIWUQ9wKGXaWggCm5lRxmpXb6wgsB8ihjd7fdqUOAckGb1IWvthBwWwX2bweHupZigSrf+hQasA0lCAEqBNCBFpT/k1XQacODIg7lUgdcEMJpMt9L94/3A7AZLW4fnl79sezcw+zLEufsZYOqorbM/hAkWBtX/zcCEfHCkUS5Y3ChDgfnyM8wsw7n7oqOXcoMulsy/oNef5vhNsRiCDWEeWgNtwrCSbDAjgyQTKDxt4e8uQfmvOLh5K7M/D33gLyffDczdPzK8cq/cb0n6fYvc/ezHkcblNsHhRtkZCtPkZziUBt9a1PBr2AEOgYENgPp0JA2aKCAueIsQt79sSKjaDngo8ygSqxI/HR2HZfZWeOCtjnfF2acCSQBbJLHJBgztkEkxpCoB2lMoDXM7AGUngOEMQ4YUzzhLBb1GAE/wxR6Az4GBQ2CN/0Q2hXOrdki6zWMsW/HDqpd++dL+sAbKPC91eADSE2ELnMq++geO+vlqP+HhpWFh4mK7ky4CDIEzM8sCnkdvxAOEpLio3c//AvDG6i+teQZUxPGTlY+/1cgMTtQnq9YzrAxSRX83I3HLs4dItaWVnrmz5tTMnWOqq6npshOvHEvST3UaaNc4uHeVabSz0Aq8RkVyBXb2wJ1/BtJrTV8eMfyWRaAiwPJ1sTGvx0EeR0kOumJYWRmpUAYZiVuKijgEZf0rlFk7ncN2jkGcf+EX3f4UBhh1CkCc/29AvLv2TsCKXlNr+tYY4Gv5Ah4aJtO/FqAu1Eo22RSSU5TvP99eRiplkCpPNJv9B9NKlTg5P4jq+LjDfhbI9pMh8OHpE5phJXAKgJ16K/xGxTr4IRwAWACa4R/idPVmXkC5D56QPutFry87m6yiB+DECR2QmlpWRmr6KZm5W8QoedjMW09VxyGbKarN7C42KBRVYDaM4iik08mYVY9K859qtVrftY9nmtudtUlkQnuvQmQc2mO5o+UStRqdEFXTMt06diK1nGRRuFBSBulFim5sPqtVP+rCi+sq7n8YXvtrdrqvf5AYzIUt2ZA9mMFbVLNLaN9K+h0WNAuB2KZt2+qAGeXzi83EZP28zfKYRUPvZobs9rza+kHSZ6ClhaN6eBspFpw+zSjzhzuksXbgGw8PfLZi4JKWlpb/WMS/SoPOZVN1cZjH4/EUFzOMD2EU0fDqTykvt8EeAOZJ107D8hhKR2+nxnyYUusHiZrIA7hpCTq7XGa+Uskl8DA8jBgzaSE9u7D5XpDCB4Vbik4lQVnZMIr3QHEx0G4hbHlp6d5yJkH/ef2HFwOjRgGPYVHQ2wRw2YD6CNEiUIMSNyqXpMSvMRKK7gX4/e8H+4Pgix5d1XzvTbMDqdEtCsW0aV3fHQU/XQ5QurFvCA8Nf+j1TPHEDl4mTKPsdZicy1Kt68PZCEDjJBRgL8QW5BhSihceCl79XCC9YOwTLaDUj/ps4VYnLAW1nte8n2Wnu5TAaOBpCp/eAjf74mFn+O8n19TLgHl1ZuB1IN3SdutBBB4YOJ9Pte323s4OC3ibbx8L0KnsHi25bw1Pd792VsHYNwBlZ+tn7LJ71ABO+I+Hswv/1T6rK6fwhyt/ZN68OmiaBPBTwhLMgoBD37CLKRi0vQ2UtO+aylvlg84DnZJOLnr8zNZ2A69rbtog6vaLSeZCYNba7DcCtnwr2Emqd/Jj3iA9nZK1ZA39BG4OpqGFyaKdBWboe18IHMhdzjLLQQD9rvFTPje43L2MD1DiJZ5BAJ3w07dWFsFRRsGI+9a0LYG5w3b455+1DkgIsl0v2j0Jb7zBjynhwr1ZRWvvmXnzEX88dbYYBLKIf5lrZ/Xd2HTgQBLLYblkgepnMIVUFb2MEVKmMjX2A6zwXFv6qkcjeXruyCdZ8S5tD+6ewRNlTDP3B9ILstfJrfr6l1+G6qAkioq4MaXn00rDwPKTQrKnvQW/gCdja2BeXj/ufHXxvjRITT59gSJ+VpD1KsxiOVaInYWCv9vljt5FiLgroe4O+sNTrGLbvffO3cIKoC389LknnoBpZlH+s9dh1dfzclAKyYtcrqVm4wV1aRoWS1jd0ezClQkPBC7IA179KbdAKqc7Af5GGYihRKijykOu1tfbEBl7BdTd8Uj/54BZwEiOwZNt4W1HmByY/9rsdfx4UH23LyaJ4XWtFtRYhDCYU3c0q2hl87FjT0pbRziwj4EDvUiSM9YCPw3kwhKrNpchKHsbIyR7E+ou1q7uD7B27b1z64+t4ME24BzPmyGBhLUI8MZxuucQf+AFsMJAFGk4nRxiTs7jj2fV109YOBOOcqRNpIBe760hThT9n+aU7V7pv0fi8MtG5EJvY4QEXzIJtIQpZt7838Cvz03UvLMrEgZVRBvagLt3T+bBlEJDK8TVdX0t1lsnUtpIjWIs3pPhlOHiZTQF40oKYdFHMGjiJ/zwvhewrgOSSN123gEdyk7kwBy0ZeOrYIO9l3ODjs5KTp+OVM7kyH/Br9MByAIbOoDm3W+A5QLtcO/UoK81SEIAxFkLy04Oh9RUeOyxgrG+tNOLsv7lcAwquhfe5VX0PwNI3UYMKnBrpOCpPW51JaiFXs8N2i/6Ik7TfxhvbKSZHElgDbqKaGatJYPdbxjaAXZ0I6yma+VSB8jxlvlDxAXA72BNPllpQEq5VV+QPbYkfRWP/g8XAbdGioRoOTXgCgRB72SHHZ3NrXCKH9NMyTt7gV08j436hLVZfVg3+cV2gHv9ERAxoHKxiwWgsOxk2BU3/ev58+clJ5KxYwuaVz06q+RE5AiU4I6TPKFHSGSkoPo+YIQEzbwy8/LYtHPKyG0jUt7j+CwzyIsWOXhR5lJWA6oQbZMh+BseFNVAX6CdJIf5GpTXg30WRXdZXDCYl9tU6GgA3B4IA7QhLx7PM7V2fg/wATIkVEcTI05wnJtg+qmi2x3Q7E/tMaG7Ny3P9HWtnYXoa99YC/12sBtefplwsDEgGBfz4q9ehwjhe0AAD2VmlnEuA1Ion3WcbfKVWcO6OTVsvpJm3q5JtxAWfe2wC8Q1unJ2QxsANjIAtyQ+/8FrFmPPg0SunwAq7XqWA0rGhsCJbRz/RdHjXsmv6QOg2n/Vl4ozfxUkEZnX4gH76tVAv0KAcJEClbYIwIxdYoHb6fkM6fVTVKt+eHP8eaxQpAH+X/q/6Ddlu3oj9HePycMFL7/fWe+r6U7lMYcM7VJsO0LI2MOCgiDSVwP6hAl8qMMWkVCVeLoeMoCJtsO+KiJaO4FhIJusruENd29zgAdkYkgk68/8+c+F/1p0+7jtOIH6MYf4QpSFPyPUl1ZHQwab5NLPV/tdppH79zdVVTVhBpFBVGZ0Phm0RkhCoNr9LeCErpsAgjY3kBucQmnpokUODgLgRz/wm6sBhYEgAk3AuSiQi+zgiidePPGh2Qwk3kFiFVa/iEwlA1rNfto5IVnVywRwwyWkXXvUn0lzOEBCsS+UDBUXl4Lrg1ViIqDdgEr6YwHQKRfv1nhVzmc0Vr31pjJcCcBoW0RgJ6hld1xP1Ln9ezpAPiWqs7EC7DAqq5zEN/0GPzKfvElHCMjbLFez6qSIHVjFj2GjqinPjtsMEO1CpbworUQ8MEmXP2/XOegEfrARw9iyDhpIuCiHxLQ9k9JepdPRqxwQZDtbNpEYfMoZQJAaAEMQmIC79Uhbwyx/9GcrAPUqq/JKtdZogwgNsBEoJBswowAX7CG3h3fC6yWA4hbwe7sT51z7GtFaaw9YRXD3PyiW4tzbmAXlEynMlnIf/RrpJtY2dETQKm3/7cNTy1CLMYU6JrEpvofzpPJvcr3KH8vvokuiU9YtWXIFBwSPbWFACoVb/UrFpe92PgdiAHMgjZgNmCUNO5TcnnUIrndXEaYO63fhlsRKhUaTemxg+GcXPJ4QtcPn1SRcuPy4qg7crk650qfVdnaKnHD30ErNQoaaJn8+/YKg0Wheyt3WqYq1hqTp+kXXAwr33JPT6+Zk1mu1WpfL5TprajdZrXNrbQhuGdDk9gwolcvV/Vt9vqaaW2SJ/QYc8/WmNwjwoeTavvkhNrtWdP+ulSEKCwsLk2TdrzZWHD++GsBcFu1X7tvYe8X3csLIAafE7HGkiSFzYOHFphp+IvQiAYKIX3YcnW3+ajFueRt0cweIAGYzm61SOmxH4MzvAMJCywJ+zgLZtB1B3zQHOUcAFw61g9vvEhyO69nCCfn1V0k0+beDLu19L2uvmH/G/NWwla3M3rp19j9gLuwFwp788MNWaXYddIqBgW2+7iwQWUF+RQI4465igV8n0dSzgLHr1AFCcnRLlGlkqRByW2mu+QflI5vXTjMrXLUNThcde/tVKHy3lpM1qGKFm7qLjoXp6emkp1Ny7ty5cVWO8SPS09PT0io1emWTxvqz2sZOn1rd0dmpmlI8fUeLzWbTAQrFdNuRYa2xlWGXES77fFEaTVJH/xqZxzugzeWcVxZhV7grPN7erRcQwfGbqOTk+SmfA0GtYHZ8xXc3bpRiGn83J0iHrDuu0gLdQgrTq4kHEXtaiW1ejzoE8uv2hCoBF+ksAA3Dh38O7Yu5LeiaaeziyZu4qTUi6KDuKjsBNWMD4SArt98ufW4vLUEG7FqA9SYAXu5jTpDsrA02HbBeEHqLAD5gi2QHBHL9fMZ7xOIHju0HePKtRyK++DYWHDzMvDK/ME9k2n5ECrQYKr2Aj6m7ogK5tWpQQ5IO7oS1rOxBNXidd9IOGDPvmbtKNtJ/xt6J5u1hcZigvwsVzTCWc8NPOlCTfXVERNevmT6NNp0NmGC23LNlMgz/Gy5Gwj/0OPVOqyuwJmMnrzGer1XM26avRw4ouEU46kBohKQceX5jXFXPxQbl36hSDPgnYrASqLeCT3RlTg4H2cSrZq/T+QVBB5gfJhaMUPfzJoC7QW8Nujx28m4Az2a9JAMgOABHElwEFkOE6ntRPJ0UJykGJUBCgVkPTGPHiS//WkQdf394uMDJvv8TGzgYEvAIvIDRhOQdiuM4DgEuS8+sS+y5BlDXrwNMVxosioWITyuQAOzzcY3+YCMYE1Dv+nX3wD+XDoe6nzfVS0ZFdXSAAipEne85rvcrgRYhxQ8i8Obk39aDsUHldaYEXvhthrhqYysCcYD9/ZvgpdNDh4Ssm1YxrajpKtVvA2tL/74+FyiysNrnpP+ahPjnZ/+aFVYRW2qT39t4E9tckCESQBsLVN1WXi8K3W37RtXpsCVd5DDqavucMta7e1kEroSvn957DqigqF+wZyv+E0czwEw7jDbAQ/sn0AY1cYNhcPB9yqSoEF5gLfdK+8xlZH5ToC+rezA2KL9eM0AawQiAzGroyyMAJAdVUQft/QNa+0iGp5Yw0oEJTNhfwCu0AtOAz7r8bADGib7wB9Kh21oG+0MutcN6MjZ4vRyw8toWtCNh6DlYd09yfFaX6g/We+PErWHmZ9iTDsNDfluv5pLfcvCLv1RXInqcd9zh3xwvBWEtWJ3aY33wrs8OUIbkXozDe7ZOQSIRONugCtL+k83mmZDxvpkwR6V/+W0BCvQDZ85eH9DC8qP5ywrb9k94BxDGD01dOaYudv9w3McU/lhZqip6z6TztR7I4JyEDzgZ0rRwb2MTarucxKYUyuJKewgzJL9eX/AqYQALm1EDqyHM0YhOBzqdDR3MZCYzxfaBkrXf52j+Mtr2S4b+ASAVMqH4Sjz8QNGpzOh+1Mkcqmwwjlytu1dEQH2tuMdm6oGMiWa1Q1x3HTYdM+ETPuETgA4pjtBnQv4yCvYHHJ3TZfesA45drQavZYRLscHEKBpq1D0UH5dfryHY6N/9gpSguR7YdXqvWkoL6GwAnyCuPuAkjGagZcL+ZRTA/v2S2B84DbF1V/zKRQBu6h4phon9gpTvuDO5WuV3Hw9QqDKK+3QMihp8PqfQMPrTfgq1ul0x4zJKW/8Tnj320Mp2lwoFLoVX0Tk37ZSqDNsdgwY1Py4surkx2T3QGVGvefeTM2fkgyLvzAfkPpmmv2lEzJ7pDTedk/t8Ulw9TV+ZdLn2ooyW5uZmAFlzgyzpbEit147nnM/X1hSlqJ3vHnakN0TgTFdJcZASMCSYzY0Clei69v2NG6Wt8MD4o/kFy6mL3QYwY8aMGUNgx0zBH1p4h2tyAIu7+48wtCVS2gfs0AQ/VX3nBNBKFQD+J60R7fSw+voAfklnu4v29nYR3ABwYPyn+cvIyWfbLJstLS3yo48+qqqqqvrEAeCVf45kCU370l9OlXYTvwxE7o7tmSyZ/PqaRgCwXgz8/FPatlowSCd0E/r1I7Q4VSaTWUTzzjbiwPhPWVYwlllkM04HbwMPPPBAF0y0JZJuiCJpka38k24VxRLExul3Q5ogWfkd+wKu8Kkd1XXpae9D23jT2MY6Rw0QGXaWhRY30MJg9mYfR1gAHzAJK1hdY3dPKtv1+VNvQL/w+1mKFx4P1vkq7TvJE99uDRXd6wnqzahuLr+5UolSY9eCFTBBLBNc9BkKG5IuksRNF4vW/pg6+XdMADmBmDBgivRDXnLYiP0e+AjgMNzSCJMAsHc+uWLSmsRFac9F08b2h5demdjyysdVxrE3xR9u/1h0LQ8Dbg1g9wZP8vRQSQbWjwe3MjdP8UXQScGt8HytUiP5dTrD4+lqBxc1328InM1ZeM+6deu4hZ2G0QGa7mlrG83ByjWw4bk7aZt4+OGl175vuW/iBd/VKzMLiJP7TbDTsUQCOJOAgUnwzrh41F+gB7VJIUKI5uuU2iiv2xCMvEpdw2AOpc+CkqaMZ1LLDFwC+pM0kL2Hw9cAsqdKaZu4N/ya89+TxED2pjT6MQZwdkbAHbCPGfV+0Br16eaHPfBjo+kLTPkBZPWvLUqmQuboSQJ0ZvoGvRd5EMBZEBZ6RgDiGOQ8KuNAZTXx1cS3FP/NcfE8kEUCMdY9xMPUcfvZ8+TBEjKKAzn0QD5dwJPcGDXynnmfgAb210dgO1I90I4bt9pOaTNe5MD41d6k7YNMRvCGnSH2rSxo6czI+AL8cOWAuLLL8eFC3D7B0YME6GLTJDNg8W99pkFQJf4nZ3WxFCmGOCbtAcW4FTy55+AaKL72bUdv5dg9XX+2avZIYaeohoDdIboKNh3gnr/RU5cIRNY2DkB9zVoa+4U6ck/iUN6yvyd1wFRYSoDiujRpX9x+RdQ0U/yXyaRJ3Kb43ZMgaoJrj8eTVwLrEgLOaTZMwggoY669Yh/6t0T6VULINdfQ6XTkDQf3V26V8us3A/yj1HabXwv69nQ5BsX+f9KBgwcPTvri6ZOxci80BCdVzw4OMjuHuP1VI9wCVTYTIn64qlakAPO+gAJ2mT2POXPcX2XsX48IeIzEbg+NFYOhKrsKb9Uito/b/4MDBd6AbBcG/fsHmQ5nvsgYX9QOtDjznPccYxLXAZ3M/2A2SnfTz36O1oGbGNlZYZAISLmccPno1LzJl8wOqHMBtbGAtXD8PK4dH3RoSXuR3MeX0NlTHCCqgIMEsvUfi1Heg1/8leLympqampovy2UWexHtQ/z4kBxWQ6toYgSNnUA1DsGPnj0A0fq0RCDki6oK03QlK/nyPJr8endB1ZdlS/7t8cGVByID6bFbaYsnLyYmQP+BSdSjfzURuGZHZ6/fcPf0FAEc3TcxQbeAKjj4kbwl8ptPObP7n3egZOMqf+7B6bsqMBDiCACoCyApiVcTU+ej1iiubnY2klIYvfLLyyyuJx4wKMo1Y/PvlYVO5ZKTeN3aRFe/s/33tA/vyG5++4RFoVBcSWpP0ABQi9fcXyR9VigUikbgriHNarFhapauZdOIwx8sqK+wAnIiZK02VVsfrVYb23k01BHbv041Oj29GIfsclubvN/nRZGhqpL61jGDhtS5VN00gUK+/mJxYvrJVtUlmatnOEBk/ieDD52EOC41Xc+K38/9VwUAAi72zKAAkKT8lfgDRsMSXXKkzJRzsR1aaqfSlBpJy6lKICJco1T5xV2l+eBfG7jUr0d9ASVU3kfrhm6ievhKX/arxjvsSb7y2PorHqlra3LLwZ0kAg6rTgWtg/gEtVNP7UqNjORUYqXRSESITmNQazQatUEnsIHOWxqBx7+8E6f8OrMia+7sZnKPBhgCP/+6N5InJz/11MrU1OSkpKSkuLi4lG4ccAGAGf26ACN1sf4th0k8DPtSJBZYaBcpoN+VWgWrT02xGI1ZuesZmJycrGV91gYOHm/s1xijXfLlYi67npxAyYA9k0qrUGgvg5KIeQkHadfXwuiPl1jeDdoO7gbeu0b3q1RgLfxMD/cPboY+sP8t0c599tl6sEbKJ+RjWJWf3yhug0BME2SJ9QIlpGF8dmrH+LetYJODFmYtek3QnlWfIj7n9d8cq4Kp4qq+268vTb/iiclLlnx5CyLldYRPy2ouikb5rPf9sdmDNEF/v0UQNK5pG6hcD7j4Gdwf7cOuAzvclFEPf1v+CMt+AfP2Am8/+qO7/SpA6aaJvn4dM1VngpZdow5Y9VZQusGq34bgAOfUppvykzbE/kCMJBSMw1Vr0wGT+Yr5f30CqAQYt2cSdYG0VQzAjPehNgHLklN7gq+ePzJh0TUiSi8WZf2MvzXhEzVHHCCLgV8/QmRjEL6mtnvv5r5ooSQ9HpPRhIvQjhgr4PE4guQAACAASURBVLz7PfRWvQjUrOX1h+DMbrH6xLWHSaVg41MMX2WlXEUAldJ1zUiKHONlaY6eIHkvQO2EOR/7GwCQ4oCDMLLjjdCrSfAr1oY+2ySB/7qNZY+Ks/cCoQGvUemGSK3Z0EHosHhzKUajKbp+11SvVW+Ff9z9nlZPwDl7vWuHOiKBrj/F8JUtmGRXvgNJAK7R5Fu5BML3pBVggSSzG+7mdNpmeNh9dBRvaDEuiigTC0FbILSeFTzJimrvFaYTrB4jBlJSykSdUO4/98Ii+BU4p1y46/06t1xukSA4vyV/YgmQxWvcf34Qf3AIGHVG/oHSLQMSpZojIzVJzUHGjddKkiE07ytfX9OdA5Q6MKbmya7FAKl8IKumyxGgTwvA1mjAri3lUF+A+516EAbwmuPRa9nIq6MBUlrJ8gLpwOsR5QCRVngT0I2+cJihnCZQgdc5URNzjJFEMOU850FwqbCZjOBW9u1Wph93Kg5q/gqsBJcdIM/uvK6QmDKEm0PIu4btqB1AWThpBVfY6eTmLXAeHQV4MTbD/VFdrPUX36OJVVfe55EP4NCK6qAj98C6lpTcdRZg3mYxq1KYHQwq1OQnpxmOVTPFWMSg88uX2e0jTtiIasBti66/ImCxI/aPiP2Jj+mtA51fw9AN3r5VIdwcy+c4rpIA1QBI3S35JUluNxBYpK1iqsZEU9NvogYGS9cqz1XGwerkittXQAbBWd97fp4bWHD1P++qSpR21Lth3m4+2ZxTargETxpNMYfeiYEwJSMwNcSAzhbNY0GhhZq1cnl8fHx8cXHJAr11Knl2+3XhAzQ/OoEgK7qG2GgippQOaOBsXAsWtE43cLfJFnqMrJl/iZv4TjjkjPOw5nkpa6qQNHnFI91tAYEP+GWVFxJA21U82WGDzkvZfQ6mweD8tKrEfW4EdLAdtJ0jIZGJCd4PoC/p8akb7lwoqHj4iBE+waOY8x5EAR1S/kwFvATsjKnO42vUFymDGyciQBFXz19rgBotURnb/OHAQLNN7tr7T4D8cWvuuw+gos89UipndfKYK6M/5+4I0gsdoXxhZZoytIN7aKaPXf4x1WdoN1syi++oScCsgY13+NQTC01GQOHZFHnbezJ8QGhH0KYyMeHv5JLnvh4RcHOCGY5rz39KZyqwDewSOi4m8OWaOBZCjue+BQuAyl8EwpuPzDq0uvuNznVj/VBJDRJMiKJVVYkB5bBlCxyNZVRYWIKhOINzCebq0p1sQOFzLElRmVDhUeitm9QuHzKFwqaA+HggctmnE/k7ucq7v4ahK7/C2xPWa4UroXEDmMJxkdECKJ02bOAgDO5C8zaIxYBU/rGbynvkSg7I6IJQRXeIyeGObpc0ijRzN6JW/7+f0QzEjrSYLe2ZHwClpDOWDVqfzEGK6oJNpfCg1+utbW2tFkHw/OAHYz2RSUnqiQaDgYeVMUvsruvRAZrkMRd//IbP1L1vl3bcPN5lwJ5hP9llP4bMdwk3Soh86MBeRhJ13IVyYTmJDGbfqMGn3yRJSl0klGD+oj0oRSoHiSa9BOhohuEN7YKmnGeXDqat+bdAWQLmYdQ/cBksnzOaDWNeHmsvgEkVYUnv0KD2CRgNLiObROYdKBNRaWN2iw3/y5sg40Sl/ZtkhoK6Vgkyz5+hjYsX+ckuuxilc+OP1jmAqBrcnBwOcMs+j1RFeeXu9AUjuoMS6AgNApYufeWFuj4AigTzXqKjo9+aGUYYVijwb8HJFRcTq6Ka3HK1aaTK5NcZVeGyGNtUAEacMOAC+n4NK6CbCMgBzD4jfTUqAQSVUqNRa2lrM1wEdtkBWbPTLZkAByx4RKlQ7t1JVSCv9XWGGUjwS39ovQ5S/aHb30NzH6oVWPbC5nrRVIzV7wRI6ONPkCXSV2W/bMerUmVEgBK3G19d++ZDhw7pdOd1Ltdt0PfI12o5ogxuIQ3/9d9V242m5EA8JlfdhmEnUrJX5guQdPrlIlRwPApo5EqL5+uxQL2uAxAh9OJ4dumD2/pA9YDKilKAB956YL9dC7F1VXAn+Wg6IbnisZcTq3Q2l7B/gpfIyJZLjdIsWltFFNcjfKbKyONrteOXBW+Djxzc/fy/7KOol2Q0DMb9SdsS2SepgGaQKc1iL8DjMKbe5OBH7buf/6XSqZbHuW5dq+Ln5UckJVkPCSXiSjuvyKh4ARLMCWiDcWFLfJ5tSuTDODsNn5GS9XiBROYytuCHEAq/yeS9EEzc/h7Em99mKc0ulPKBdblll8PJoQ6YLEJ4P0uk7kgs5a7rxAc4KgDs2jN2fxOgoWt5K14bSVKBuP7mgG+eyNNLPCEAi/8BcOtO4MV5ItDfz+gJAPe/c2UMMLMYcwLYtQnm7iesYZxS4jOa/hE4tGUutBtgP5nFx7hj46Or/nnXe5Dwo7cTq/o0u9xUevKgL/mo/OHCdoOvrt8RKmSu6wZIyGHyE9l2tJ8zlDBYLQcisZudgAzfpa7YBCyxKGjneT4Ap8BeVC5VsGUHiPN7Jzlo/k+yQkqRmkmwm6VLSuRLbNpt0uOkUxLcgDUnn80/pGM0z3WiWfXoxkcrJApkJFb1abdjR+EVisR+TqgBZ9h57Djknd8AIWL/1YsHJ1/S2u3DTp8Wu58ziVqzaNcJLU5o6gtwWJnYPxKFAnbPwCn+7q3mA6jwBbZ1u/TaFflPL0AdT1qbq0ejtILcm1kMZhLMCXZKQIsjbqoNmPUZw2B290pT/nPu2IJ3l3aoxA4Mqx7daLnrnwAJj72cWDWg0g52ZG6FgEnKMZigReF2fTOssDKEWex+nl/2FZEwLtHyuQgkVYRZ8FfJPPQRdS0+HT9d3bcpDITxhxhTMQpizf/wv0fALhVUyEeN0bdteI6n+vwSODjuYH6NqBfUwHNip/k0Y/RLpFSXEJl+1wq5oyvKnAg8dWZI9Qzcr4hiERUus7QbGrNO8Zc3DXSwSyMZ+wqZik4Vclw+leMbY4TcTvW2WZOfeD4ICJQEF0mqd5rFkE+YJWz0YT1hJrxejAf7Non1PK3073t0FIFKwISSgPGH3qp8rnJnCm9BDeMm5gelsC8M/HQGTGW9uBmnN11c4RSuiLJXQ5vlLQJtyRRhtFNEFg++aYhqmLpLAkB4cPvr8Tz/BkzO7sRgmPypum/fvosXL14cHR1thySN36QL01vgsN76EdQrQwO9hG8Bah/jKDJ/gLsEc1cJsP7QWzv96b1uQz2QC38bORWz9BDxPJnUFSICYM5Das7wlh91GEFDuy7MkAVFb775YDtRTE1S9ShO0G57C0i2WCybNm3aZEOrrTOb3ZIvq/daAb01KsyE3ImxP02AgOkQfMIowBy/xFkiekzS/Iu/7Mf/9jeawrD4+ww0p3c/HcecGKJgSOBIK2DShVmyoIY3HzQfj4oiRduz9QKChiwZt0ktMZVd2WChb9Nl4BE+5SSXZQ9S7jrndCMQMXhnzCWdYcH/uz+JTqrXi5xfLNkAqcx3+1tONN5iaN9VJeYN9gNpp+aRswHGxcFySozhpnockn5IBLJGHS0bvJMWdzdZjRxVpjuHGoRGfMYIL597exIp6uikSGH77DNJK/jdAmHymCYHIPCpQ4XDLaccY5gbYPBZ3SXC4P53QNOYfjdkBL9+EH3Xsxv0+4JsxjkD57F5AySX7hbtB5Ox26M8NOqog/dbWgB0aj9Q391y1GLLQACHzyczueRM0fQoVNbRCaE225jExERl4N1/SWHsdgCC41NCcXRqhUC3nAxaw+DS7E1q9kG8yfjfS85xLsjvX6ufIpqC5bP170nH9uxhzqhLsBlItk6eDJBeFcSPKcx5iH1lxIuZd2VYZJ+YmAS1GpS0tFpsGQ5BAHwyo0suvf+cnkKKujUdhNIH8KIF7CiwWXYDAo4URyj7ZSo15S4jgM4QeZZLYmjwfjMgMxnT/1O/4lySoryr03yq2Em5Upx/5h4mjTxwSWuHeVuTsU4pBSjRJjQEkitJnokxJkM11fG2yBbA3USMzHcRki63iLogynhUsIAPo0k18pjc3oM1Q0LSiJMhJoCRHTAYTjoNFV4v8MhHhNVT0Sl4IxNdDYLDCUThwAV0YiTa+xmxIRbFjATMhk9FO6IaiGVVcSLHNyukuImhPIGDk9n9MiVrBqAstozFvZYf7NaUiK1ZmnispiRiG5UIysgWLzZAyYJdYtw/1u5Br7+VQzP+AjijGoY6qmhy9xwHOCrqjJfjw5UUEUoHnKRFtAsSPyLMFF7ZiS8yEaPFAZDR3KKziYpy5kavHDwoRssgoSQLrSGQMnw06P5Ndm2CufxWdo+lZM19eyhmlBslkDnyD1I+eGwNe9ROwCG0RPqNkk0L3pd81FirlUNjxnwqmgZRp4cnVskFR8/B5WWYhoPbPcTj8egOHqyt9QIkJvYPqzNRZkcZAYL4fqSIyBadTTI+ViFpzoPx7NpVpMV+adTEiUu633uO2WzXqtXlKHZDyZo/1pFIznSlEnhfhMvEMvLOBHOcWrQ9HF5DXykYx6Ykv5veobfOOMSYVIkCt5EY6etBtLjDpc/LrSQHNfAXkUzJfSDyKPVyD0JSW6Iw400HwOAWHeBR6CdsfXSVbr79ts+AMKpFBM+Mduzpv8U8QAWNcNMuO5e0Yyj77Lbb6GRswak/7om9kJ+Zv3EUyn6TdyMmE9NibOYxXSm18hSqokQgoVl89ZDEJtSTesELNKCD5HJXD9YNqmQD626ODdS0niWGw0VgUbgBjTCfPHFHjrbVuN2gjpQ1O90xTSm/ZuWFOR/fMWituNrDUT43zqYNuP4pN625L/Sp5zjIh/N3/LFkTS59Xp1BPmEzi5RbrUpBDvyijsZPMXd1aMkp7hN1OEwUOO5+T5pmfL1zIZ8aLbe/JWFYP/yGbyK6du7Iq2pV1phSy8ziSG775/FLODq9XkCryVUcFB/Hpa0J60C5uF7W7HRjjRK2TznYajQq+54CmHNJ9vq4Cc8NdqtD3VqVe+mRYYM8Z9yDhv3xVvOH9KmPX5NLH0b12+4In3HGKy9xyh0aGCtn1T07LnXlFXPyO5Q+44Wwy+hccFrmJS6sAywKhSa8rDnUJKp/q2WUqKd7qmrM7fF6lKUNteI4VIrd4+n0Aii1xJaKHKmM07kt7rtPn9H72vGCTlCP/+yykdz24aeA0X03cGBCuNKtZOnRzqXcvLL6TOZNlthJT6VnZMSeO5lLn/TmVyPPho8yyb3eMqd8cPtjg/rWvs6O9iC0yYWcC2MqL4z2yUPaAHw+OtInnAUF1YMVzdY4sWTCZmhq9nh6tGzO65F1Wju1QItF5vB1ekSeVOgx6s+K84801Fu48z0IEVcsVCPbzmUjF5VCyqgBRuH8hLMcSLDrZMrTcvfNr9ysv2VEf7zWiGFnQxoiz+Uyts9jx376fvjd28OHxFwqUyvDB4cQEbVD3D67OIALvrALRkVF1GUAtYe61lArChQammleUGcH0MRWKju/i36C6gfKcZkd4IwwclLq/xo+8lgrgLJ/bcJz8Oy0k8OXPAqs+g2k3brz1remOApChqzPiSKtNB1eWJr0mvdZ3i+4lwr0kG8Z61bmQ2bWG9U4JM0cKvk+fpR2WnuLTmkFm9oNkbREIWsduRe0sdz+IlG2gcqib/RO0uusu9II5biK1SCEGGmX5q/15Ps7xkw/y87OcQw/eTITWP8zDti2aZ6NE135/CWUnknnBVfSRX7GL8Gxj9Q80ca/NZ901zOBrFmH4FF4FMFAkXpbpKFZbwWn2k1LZKTMh57cPIc2zPKRBDdXub794mkBXMWA4DDCJW0bQJLTwsgIIug/ndNmoPMkw4dTWlp68sCB8X6+HJJPzpkzZ4bsX+Hi4rYZvM9Lzn3Ao+Tk/A7l9nRK1EF5U4e3q0dpBGlg07W0K616wLkYWqwuGcrx4MEUhh6iEtzYv/3CSTlGigGBFGhvrQukOY610tpfTy3TuVUD48ePL4U0xo9HM6tzHEtEMOSQ+aaN+8Qk60VeEiuIVuWkiTGUoGDAFDpC5QIKYDyMx22PR2fTOQi36oF/LIYFVh8yQNWEif7oAcKEb1sHqHQMcbQ1cDcmVf8yfvInHzSMEqvgdcgj24TxzsXI6+syT4wYK5Km/VXGjl+6Y/3b7kliDCAW+nmZf+4QsOg9/vkn5WU+uM+T+HTCwlXBzVeECFr91q0uPrKlCmA8B7RARwyyZnnif77hMzV4teosdzQcTlKaml3fMgfIyaJEFLc0uIgPZIEmcvLIFgGnGr2XzBOc2LoVdcr+duz2gmd38Pbvu+6SHsv8cyzzwWy4S+kG4qh59MqNuHWEO2hFIxNFi0ws22uR+ZK4yG3gw0cRUptb37csAoKAOycKMfZcxnJA1lzjV9SRBq8DwKpPPjF5xGTx8GmmTuX3TPs9k/YAr74KCHWDzmXAU8tgHVwmBFYoPBt1V/7cielBf6T1TwRaW8ScorNZhr+i0uEktf6Lmxv0JAHkZEEDRJlEBgCZTzlQwkv0NZQD+wArk3eH7V60AGf5hAmnCwp+LVUas+fVI63L09MdjQDLn2OZAhZzlzvkySev+q0IpbsVZTAL9BeBE2kJUiFBEn8VQQ1uYND5b/pi2uupF5A/f1zQlCqVntSm84/Undu+XeG2UV1hNgtKR4auFKXb6W2/WGhxHPBuXvjcC+vWabaoD9o9g+31x/dF3JPZZ1xnaJRgnZYU1imzKrdO+m3FwnvCy+77rwf6ryu9tDBh3+5lu2C8mfFmQO2RY05u02o6AV9rv37vhyqzmjX18Y328KfyFZrLCme2efDFZrsHr+9Hlv3PCNrQEafd3yoHCMlgFFvl+F8ulnRLukj1jEgTSjdyDPwkEcjcGTsYiif1nfSwCCyMv5SZhTE+ADN0WLn/0N0GWL5s+cuTF08+B5ErYuCAqFIFbxq4MQTN6IzSbENHR6j7r4DSJzbqdQUrctm3KwIe1uoA0tprfy29KC16X4kUFjiL0k0KUm0TQMqcOQv3nO978mE4cuTm6kzIvFwcEuK3tMecPz8GIHz5smVcImZFH9IsQc+VqvRn4gLwIZJFi8etxI0XOR+JYi/3mwvfsiEk6VhlO08jtr93iiAngcEtrUo3xnaAW6vSyujs3PmxzXY+E8IlUSsuLi4ulmC8/t81AG3hy5fHdLXckt4v5bCQA5cJ6jrtQBllE1EVtwKZPlmxJMIypJe1Kb5dO0CTnNZ+jkc+QmWyhBkHngJ3o2izJ9ksrQswqZoahFFlunrL70rW4808x2L2pEcODYUjt0vgql+9aHJaI/uQl/vqa+z67zd5cB6YMhh2SJ2vdDc6AvZ/TD+3cvab0U2eBkDJcF99WSoJruLMxmow6oxsUAuWSbo8mwuUkzBHTfv8m72ARP5vhFHqYsRYlWDTtQZqWXSlgXpALzBQ6orTsW3btm2/4kUpz/JwHrvYgN0OHDGK0HGTMojj28B9hQxUgkrKNNmkrEuexPVRkP8NO8xdrwhEcDsj/Z7PJSQ8/yXARBqwr7T7O3TsfrDNzttvF4kUGisVRe2C556T4qWHuhqFiCMc2EojLREBTKGPNDIhF0ZgAnTqoN5GDZi+WXOt6+OASyKe0KEBmEBjA4Ag1jSp0gCEMAtX1skUxgK4XLe/4OPnIoJgE3eyAerqSJbevZivvLI6eYRbEUm/QM5D5qjoqrq3oYZIclFIEdmblLQ7vuU+QsoIt8OhPX1Js/+yV51wyV3oVli8XrczRu9sQTazbuvpCNo7W50hLX2V1oh6j8dz9vRlj/lWZXp1mPbYovJarUbtnN0QUR1iD/19xmcnOjtbvF5v/0MwpU+Rqzbh7CWVwuY3Zqxhxk0p6jFC7Dk3LM6szaywuGWVEe7FWm9pZ1F75rBd3hkJdlWpz41qYEl8v6oWoc39HfQREhlSJiMuAX+je8GFF/mBLsBrUNV7Br8DG7QaIZ3Hf/G483ITl2l45RYQTgYue7+1FSCt+491Vf2ZVOBAiYl8QKEg9ABILyrEhxGdiXLHt91Gx3+pCYWCu2mWjgx0iViaPMgJanznV4W2j8QtJBYVf3nhLwwgw+bf15YOHAjcK7zW7IU8e5AICGFAHu2G4AaOjgZx0g6fPY902CBavzJSdXl8w6j49SgOF/RrbI2AFieaJVP8VW2CC8CUgSXsymLqTOAj+GiKTtNaF1kc2dfnVDfRxL5bogCGb/sF/JXCsf/Ba+i4moPTSiH8Uhf55SjdYMehJTSzhHRRxyou1GFRur79NjoyRpSHto8w213gSK7t7739RfD+9sDeLBUGXT0Chf2nUAm1DNgbQEdYGbu+6TKkON1ui33pK4l8vielz/tMhAL+ytjkfMr2tP4a9Y+dWhjMAVHQhPg8MEdmkQfEnvFtcgM+e1zleRTg4+6/p2+Nr0UBOASb1+f6DjpJubpXkYo7esMBabGOOYLOnw+69JUfQgjQ3El/kBrJRFUUgF6fne3Iz1mS+uCveeHH3d9PEQMW/34SBSZcgIo8tLjA4VgC9E8Vucbh8nw3rbQqunD1SkaIn8NE8FQ/kPtEXwAYFPytHyZGHD8uvk6vVvvmJxQxDyb8qmzt2qK0UqEwteIwwptv/m5nZDejtLkeQcByAKAhXylGPV3kuorsSsBDJPHk9UBr1etqoUEK1YBW7nBUTHapiGqIUlAkGfVuD6iuwHhAColVof6okV3bv5asz4mCTfdSQCEFY70N+ay+Ct0lkGpySk8XpQAUXpEDck1ep/jY/SUwB99dP0H1uTMpd4afGdB+2Yvc1BrrOq/sTIgq5cX98y7sjbW4qRQUI/9hNuv6utNa9JGRkQaDwWvNPhdaX19ff+K28NdmHH10S72ucGB1zN9ih0QOzx9l0dSXNBsMt6WktCzWuDSpLRrMwII0p+xik8tX06gotik7Ewbs63CJsPiEuibxk6881B5lbfF+pxzg8AmWAzeJRrHLLmU8a2HJkO59Rr2yrt7Sc5zcRgkwl+qFRzruCT2xj4gJ+wedL4KISmU/XRuP8PGpCYTWa7s/kxzcIjZ3wmH/OnVe9MPqXVp0eQ4X3207PS9FfBTwQZWAsv1xLJAvuqtU8WmM2HdQUgNzYpg0adJLo0e/tLFOsfHVdetehVvM+ycUOR55BOgnwgIHTYCnon1dxUsm2734QE4/II2iQLjT4Qh0NhxwpEf6a19fOz2nem+WxUJyuQuFhIVdghalGy6Aoz7aIZkyWvuoQW3QHsMkUcL3yTbC2zvXARHWCa8gwCO8W6dUPvJ7B7VYBp3Cg+RIRplsUOmQ3K+0CfVcvspGsMnycLh74/0CdUaVy+ToRKXLtZ1tN/RrvuBLqbudj+xOUIbknhSq4LHPUMw7BXZ46XNcRALvQowM6n4IfMwcjkFb49ACQhhWf4HFz982E3ZLAbP6WpPdKWIWbx+Yryyy+K7Z39TRG6/drVSbMCLIHC7ypgBpzTJnhVAXy8Dz4LbnGf3AyueAafDSENXEgvUBXzIlhY+BOR+jjTrD5QL0Q0/xWSrvJc3sDLxd1FBoEhffoYF8ZRHya/G6x9MrfYXtNgcmqaNObT/6gRwP/SRX1kuq+P41G60wh3iq+41l7JIlSySoUPnJj+cUd1x6fQ5RZ4gay9jzcGo4FxcvHjSczvtuEgNlJi67gkKBl3v8PZvfnAPAhVyNE3CrTUMMjWm4cTvycnNPuAG3I29+qVhA5GROpCzESMY5Mp5PhEWwuVkfW4f0hjonQ5xQEH+KYfU3T2Y3gGdQZvFWA/U4VSEdChdA3ZmeEfWeI4D4dljA5UjWhYhYJhn1Yg4bb+ynRu8jyU6DdxOnZvVXnByuHuX1PTVkKZvg/5d37sFN1Vkc/yT3pkn6Mg2ltLS0lFJKW6BQYFtAAaHIo6MgCPKyILAiwqqggK/RmXUdQFjWRVBxFxB2QdRF6SrLVCngo0Api22hQGlo6Is+KaWP5Ka5SfaPmwI6ruusNrT4+yuTuXd+93zv+Z3fueec3/ewUAtZ7/o2v8hTn1S8mk2gDq4a8ygMP0mjHLlmlQ/RCaO2+LS6tPjRqHbAyRCzig4GwE37eSYEEOxIrlNup8xuCiyMSV8FkD8M8hJwunYyl83L0uBt2JWWtqvUF6igB9wdDRuohy/GnQTwaVnJJHjHKWpTw7b6Y2n1osTWrvL/HGpeqYRYt/tjs9nczylXA2+6r1gGee/tnL+APGEzVVVA2i7SmpsFAcJfnj+foiI3D8EX19eIvNiykg3lW3hcL1LN5FS8vaw2Kx0WAKz1hwPdm/UNBwVtfaG/D5BPAJDHggVqRx55ywAf2JUGa+NC2RxKKeHRUDRhNQDjngdUbHA1AF5O6VQ5Ymrqbr1L184A/KwFpokCLkvfLzUmsYRL85Kag71sQ5H2wGQa6AovPbxXFjPYGSv9a16tYc+8WhGVy6qCbwLr+DKkMgRoHtLnDaYshyESWDDyTcddAmAvUTy2766MyxyOAHyBoeTsYfYkpZToIn9XTM4p5tnRYKdLFx+VtwsXF+rqkgip5FE49Nakp/evpxWRcVCPTqSjGkHAeuGHbMNlw2HG0OzbbMyBSdBVaaS9K22nEiDYaajFsHN2A/WAjEv1JfGURsKjzN8Mhw4pnxoyQNMv3Wb3F9WA/2Yda+s4THZ29sHDh7UYGmoFlizhIleRlRMoDdAwqcHQ1ehyuVq9vRg1KjAwEtjh2kxKCimI2L9GZDLYB+r1HdcG/Fg53QygDkbPWkxiIZijnOqBOoUywfsRfFqeBaZQEF8wi/fjoUcGZ0zPKcUnEd4rra3agDED/jL0dGJLzjVbx10CP4rrxOZDTX4jbXC6ZlRppJPBjr8C0SFfRcO1/Cd4iwKXCvQMvw40HYJDpAAR5CKgBuozyLibgAapky0Bd2TcFxjMk2yC6eEw1CEAm6K8RwL5mEz33efq72LB9gvHCno4S5TU4CHiI/DfLVkVIcXtxgAAB5xJREFU1TQaGTEGufNpgN5rlmN6FU2M/BObAKZ/1M0hsAjysVRGtTKAckwRxfQ/W0DfvscBv5TLpiFMKDXij1Xtdi+USLFG7mwACHvIL6qCPqf1lb5HQDhCoDdYBMGR81BZPCcBOTLGOy7rUccXHOMfMLNvdnj4+YeaAl4BSS2Bg5KSwCqCcyuROtsugIt80iAYfueOngttwdcM4iBu6NC4SMwFsbwWC4eYee9MmSR4SO0EyWKTQG+McWfa6HzboGYf5FbB25DIEiD8dE5OGBZw5EBTD5tWSZVAcndSUiZcraYasglTBwE6QeHukn+0t1GHBkBNfu4LuIWsAiiFtz/t00eA8ZhMgCwfO1YZTyyviaJMty5cJSksN2hzsDMVlw4xihjl3qr2M9T833VF/0sB9I76IZd9Ca5LHlpfEAtlAwyBhjRLbeXhopZopyAIBpt9TdWDnwXv15X7OZOCPjwiJ+6IsIgX4r4e0pgbFl4qdpEiIoy+BwVtF1Vj9DnJSadyhLS6+xlAMJ/0SSZ/0nn4fEAjXIcZsH7lDpKyu9/3uXqY1595mqLoo7kMjMnMH2RiIa8DRo2TAmIaY7wydRK+g86U/wRGtA61C3znIG/upLZfdzmED32bWZ8aDbEbYBhTPz4OdQwcl5HJoG+f3qawMMUUaohpbJxcnKmT8G326l4udTJPUNZOcbz6xL3BVX24pSX9+djmuxBYuf4AcGAgKcX0eMoEJ0LJgLFHb1w4mkJNI5PTY3SSTmwey0naMyTaHktAGzCvSw6YmAKwfy88FyO25c2Ojo6Jgsp9RdEhwyEXlF6sG5dtviI6UEPw2RA0EvRvAJLT8a822+hUGqAzUNFFi613v1ty3d1uvt+twPIQqE1HvtGzbgUrXmkRHe5DofYr48+cAaiGQoODzgWAivGOfBias38KAB/wMPi03KLiQGVRtAwYbXAQmKACm0+L6IJzUMl0Rnw0HhqS0/0rzXInA8BJcAWQ312pEC0J5YO1G67fMk0MhUBRLMg3i0I2gsWnpYrBbX9Nd0BDun8h7RsUbwcA1FZvYT8rikp7FmcsYVvyRXJ2jrkaTEwb1VXhEQYBMceHsR8ghMqaYA19IfmziW+8/gfFb2IeG4ya3B9Ii3Z0AGSvjcDGFZaLoHAbVuvgM/EZIOFsv/er3R01m17m4/dYXU0l2MueJLOUExMPxlxB72ad3mCksP3lbwcN04h2lcuHMRxnCUpdcz2nRGmUwjgP9F6xr4ixU38Pz3adD4SkorFLpaVM5spBGTMJYCgyOjnV/vK3gx9gtwOSzj/4VhbmIcH7QemjSxular+pPqurAXzRAOGlydsmvoF/M5FlUNbdydeu9pe/vWyMridQrL+fT4EZxrD8DzWAxKBvQTfT/1IR0G22wlXEIkIrNA9UnHq4HPgIKKbyZMhPaJTWQT+GAOQWA2ZBuHgRySEWTHlpVuAFoH9VFSD2016rB1pO0O0xcwtoEpHscUEF+vKGhgNfXb582ffTCuqu2j3w/mnfXUarQ1JJei9gRt81NzSAx0Yo5yiXJ8B8SJpQYyc5tCJ0IUuytgNWJLUVz4x2zbvYVNjAahWc/gNOuRtxgaQbkQXQbR3uevEau+auUKiArDnbrY0qtWjDU0PlkVk0UQ0vOgfzPArH1thp+4odRNM4O2F1Oe/Wq9hC1AiAxOJ03nHiwaH2yCx2s+HGTOvnPjaqblovgNkJedW8C2zBjywwJIIfj+s9CYBnNABN1FKcg4vy8AYslYwK3OeuibOvNda/hRcD+/YoM/S694iwtYnt0p2mAdjNOPl3kbe3xRIdnQA76qYtigZYvtZIFn78FmDh6T/i8NxDeVIDEH1YOqIepR9DLQzoA5RHQhOlxFtqOHcPQlA/oemZAB5c6PIcAKKH5pGV2uLeJkK8CWHW+2dYZh61W3GVLXFxR+9BcPSjqfgSQ9C03nkACHqgKcJkjOKSEgbpD8Nh6djM8OgTNaN7NgkOzpLQKyoA7rxdQBlZESVNLZd08cb8xf6Ll4WbabIyJ5PSTUGjj1oEhH/SC+/vn025U2wA2oDMgnLgN99kb2wMuFYVD0Q5vXfv4cDAnvQe0MPgVxbWhN9mer7QaLkDAdAZ2Gs/Orq2NDsp+/HY87EbTYsHxbc6dQBTmObqYfArC1sIg0bOpdZx59kApAbDzIXxFJxLguDznDeRCV4Wm0NQeQEqQ1CNYaGIPHIu1z0ov+cAAKDr0dGLVrDxdaC3ycSx4aIVO66/PZKXAEEgw1zqW7kTbQB46bdx3noJnmpE1VUAxOEK/ZdOyzHzHKVHkYfCALcHgKWRmJOBMD9oxcyctrSf3gskB6JDxDNRgNuxDWr06WAmcDdQfAmOgtSW9rTaWmw2WZbsVquH5fcgAC66YkZfR+B7tV2DMMMDN9O+kixxe4bnloBOS7otkenAui5cfVPIqJO5/cNzGiBJpGpPn17Hur01jqs1ZHjS/nQIV9jWCtqp6nURJWDoI3DN3hEA8KQf4CIVUM9kK1zMwNER5PesGuocYsSqSrBhXGsosf76AACds9cqGfEFuN4x5Pe4IdI5e0ED1xwyv04AQBRQy3Y6yvgPrpUsji6NRicAAAAASUVORK5CYII=" onerror="if(this.dataset.fallbackSrc&amp;&amp;this.src!==this.dataset.fallbackSrc)this.src=this.dataset.fallbackSrc">
           </div>
           <div style="display:flex;flex-direction:column;gap:4px;">
             <p contenteditable="true" style="font-family:'Space Grotesk',sans-serif;font-size:16px;letter-spacing:2.5px;text-transform:uppercase;color:#fde047;font-weight:700;margin:0;">
@@ -462,10 +106,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 02: Chaptered Table of Contents (Uniform Chapter Box Heights + Page 02) -->
-  <div class="slide-container" id="slide-toc" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#f8fafc;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide-toc" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#f8fafc;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#0f172a;margin:0;line-height:1.2;">
         Guide Architecture &amp; Chapter Index
@@ -609,10 +253,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 03: Aurora System — Primary Containers & Bento Units [Light] -->
-  <div class="slide-container" id="slide3" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#f8fafc;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide3" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#f8fafc;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#0f172a;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#4f46e5;margin-right:10px;">01 //</span>Aurora System // Bento Units &amp; Containers
@@ -682,10 +326,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 04: Aurora System — Primary Containers & Bento Units [Dark] -->
-  <div class="slide-container" id="slide3b" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#090d16;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide3b" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#090d16;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#f8fafc;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#818cf8;margin-right:10px;">01 //</span>Aurora System // Bento Units &amp; Containers
@@ -755,10 +399,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 05: Aurora System // Micro Elements & Controls [Light] -->
-  <div class="slide-container" id="slide4" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide4" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#0f172a;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#4f46e5;margin-right:10px;">01 //</span>Aurora System // Micro Elements &amp; Controls
@@ -929,10 +573,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 06: Aurora System // Micro Elements & Controls [Dark] -->
-  <div class="slide-container" id="slide4-dark" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#0b0f19;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide4-dark" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#0b0f19;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#f8fafc;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#818cf8;margin-right:10px;">01 //</span>Aurora System // Micro Elements &amp; Controls
@@ -1103,10 +747,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 07: Presentation Charts // Bar, Spine, Ring & Columns [Light] -->
-  <div class="slide-container" id="slide4b" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#f8fafc;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide4b" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#f8fafc;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#0f172a;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#7c3aed;margin-right:10px;">02 //</span>Presentation Charts // Bar, Spine, Ring &amp; Columns
@@ -1370,10 +1014,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 08: Presentation Charts // Bar, Spine, Ring & Columns [Dark] -->
-  <div class="slide-container" id="slide4b-dark" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#090d16;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide4b-dark" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#090d16;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#f8fafc;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#c084fc;margin-right:10px;">02 //</span>Presentation Charts // Bar, Spine, Ring &amp; Columns
@@ -1637,10 +1281,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 09: Presentation Steppers & Structured Tables [Light] -->
-  <div class="slide-container" id="slide4c" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide4c" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#0f172a;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#7c3aed;margin-right:10px;">02 //</span>Presentation Steppers &amp; Structured Tables
@@ -1775,10 +1419,10 @@
         </table>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 10: Presentation Steppers & Structured Tables [Dark] -->
-  <div class="slide-container" id="slide4c-dark" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#0b0f19;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide4c-dark" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#0b0f19;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#f8fafc;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#c084fc;margin-right:10px;">02 //</span>Presentation Steppers &amp; Structured Tables
@@ -1913,10 +1557,10 @@
         </table>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 11: Frosted Glassmorphism // Physical Specs [Light] -->
-  <div class="slide-container" id="slide7" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide7" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#0f172a;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#0284c7;margin-right:10px;">03 //</span>Frosted Glassmorphism // Physical Specs
@@ -1978,10 +1622,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 12: Frosted Glassmorphism // Physical Specs [Dark] -->
-  <div class="slide-container" id="slide7b" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:linear-gradient(135deg, #070b14 0%, #0d1324 55%, #090d16 100%);padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide7b" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:linear-gradient(135deg, #070b14 0%, #0d1324 55%, #090d16 100%);padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#f8fafc;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#38bdf8;margin-right:10px;">03 //</span>Frosted Glassmorphism // Physical Specs
@@ -2043,10 +1687,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 13: Executive Telemetry & Controls [Light] -->
-  <div class="slide-container" id="slide11c-light" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#f8fafc;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide11c-light" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#f8fafc;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#0f172a;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#0284c7;margin-right:10px;">03 //</span>Executive Telemetry &amp; Controls
@@ -2194,10 +1838,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 14: Executive Telemetry & Controls [Dark] -->
-  <div class="slide-container" id="slide11c" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#0b0f19;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide11c" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#0b0f19;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#f8fafc;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#38bdf8;margin-right:10px;">03 //</span>Executive Telemetry &amp; Controls
@@ -2345,10 +1989,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 15: Deep Tech HUD Component Suite [Light] -->
-  <div class="slide-container" id="slide11" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide11" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#0f172a;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#d97706;margin-right:10px;">04 //</span>Deep Tech HUD Component Suite
@@ -2410,10 +2054,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 16: Deep Tech HUD Component Suite [Dark] -->
-  <div class="slide-container" id="slide11-dark" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#070b14;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide11-dark" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#070b14;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#f8fafc;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fbbf24;margin-right:10px;">04 //</span>Deep Tech HUD Component Suite
@@ -2475,10 +2119,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 17: Warm Clay & Tactile Organics [Light] -->
-  <div class="slide-container" id="slide10" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#fafaf9;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide10" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#fafaf9;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#1c1917;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#d97706;margin-right:10px;">04 //</span>Warm Clay &amp; Tactile Organics
@@ -2527,10 +2171,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 18: Warm Clay & Tactile Organics [Dark] -->
-  <div class="slide-container" id="slide10-dark" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#14100e;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide10-dark" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#14100e;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#fafaf9;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fbbf24;margin-right:10px;">04 //</span>Warm Clay &amp; Tactile Organics
@@ -2579,10 +2223,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 19: Editorial Grid & Neo-Brutalism // Visual Anatomy [Light] -->
-  <div class="slide-container" id="slide8" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide8" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#0f172a;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#4f46e5;margin-right:10px;">05 //</span>Editorial Grid &amp; Neo-Brutalism // Visual Anatomy
@@ -2684,10 +2328,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 20: Editorial Grid & Neo-Brutalism // Visual Anatomy [Dark] -->
-  <div class="slide-container" id="slide8b" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#090d16;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide8b" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#090d16;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#f8fafc;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#a3e635;margin-right:10px;">05 //</span>Editorial Grid &amp; Neo-Brutalism // Visual Anatomy
@@ -2789,10 +2433,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 21: Neo-Brutalist Physical Components [Light] -->
-  <div class="slide-container" id="slide9" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#f8fafc;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide9" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#f8fafc;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#0f172a;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#4f46e5;margin-right:10px;">05 //</span>Neo-Brutalist Physical Components
@@ -2845,10 +2489,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 22: Neo-Brutalist Physical Components [Dark] -->
-  <div class="slide-container" id="slide9b" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#090d16;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide9b" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#090d16;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#f8fafc;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#a3e635;margin-right:10px;">05 //</span>Neo-Brutalist Physical Components
@@ -2901,10 +2545,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 23: Gradient Directory — Vibrants & Pastels [Light] -->
-  <div class="slide-container" id="slide5" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide5" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#0f172a;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#db2777;margin-right:10px;">06 //</span>Gradient Directory // Vibrants &amp; Pastels
@@ -3081,10 +2725,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 24: Gradient Directory — Deep Jewels & Bioluminescent [Dark] -->
-  <div class="slide-container" id="slide5b" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#090d16;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide5b" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#090d16;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#f8fafc;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#f472b6;margin-right:10px;">06 //</span>Gradient Directory // Deep Jewels &amp; Bioluminescent
@@ -3261,10 +2905,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 25: Gradient Directory — Neons, Earth & Contrast [Light] -->
-  <div class="slide-container" id="slide6" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide6" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#0f172a;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#db2777;margin-right:10px;">06 //</span>Gradient Directory // Neons, Earth &amp; Contrast
@@ -3441,10 +3085,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 26: Gradient Directory — Cyber Neons & Smoked Earth [Dark] -->
-  <div class="slide-container" id="slide6b" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#090d16;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide6b" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#090d16;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#f8fafc;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#f472b6;margin-right:10px;">06 //</span>Gradient Directory // Cyber Neons &amp; Smoked Earth
@@ -3621,10 +3265,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 27: Technical Anatomy & Spec Matrix -->
-  <div class="slide-container" id="slide12" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide12" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#0f172a;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#059669;margin-right:10px;">07 //</span>Technical Anatomy &amp; Spec Matrix
@@ -3698,10 +3342,10 @@
         </tbody>
       </table>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 28: Four Presentation Container Rules -->
-  <div class="slide-container" id="slide14" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#f8fafc;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide14" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#f8fafc;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#0f172a;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#059669;margin-right:10px;">07 //</span>Four Presentation Container Rules
@@ -3804,10 +3448,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 29: Dedicated Inspiration Tools -->
-  <div class="slide-container" id="slide13" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
+  <section class="slide" id="slide13" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:#ffffff;padding:44px 64px;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 6px 0;">
       <h2 class="slide-title" contenteditable="true" style="font-size:32px;font-weight:700;color:#0f172a;margin:0;line-height:1.2;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#059669;margin-right:10px;">07 //</span>Dedicated Inspiration Tools
@@ -3822,7 +3466,7 @@
       <div style="flex:1 1 0;display:flex;gap:18px;align-items:stretch;">
         <div style="flex:1 1 0;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;">
           <div style="width:100%;height:112px;border-radius:10px;overflow:hidden;border:1px solid #cbd5e1;background:#ffffff;">
-            <img src="https://cdn.dribbble.com/userupload/23799363/file/original-2001b6a080f130920511ec2b0993e9fc.png?format=webp&amp;resize=400x300&amp;vertical=center" alt="Grabient gradient generator interface" style="width:100%;height:100%;object-fit:cover;">
+            <img src="assets/tools/grabient.png" alt="Grabient gradient generator interface" style="width:100%;height:100%;object-fit:cover;">
           </div>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
             <h3 contenteditable="true" style="font-size:18px;font-weight:800;color:#0f172a;margin:0;">Grabient</h3>
@@ -3836,7 +3480,7 @@
 
         <div style="flex:1 1 0;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;">
           <div style="width:100%;height:112px;border-radius:10px;overflow:hidden;border:1px solid #cbd5e1;background:#ffffff;">
-            <img src="https://webgradients.com/webgradients-og.jpg" alt="WebGradients preset gallery" style="width:100%;height:100%;object-fit:cover;">
+            <img src="assets/tools/webgradients.jpg" alt="WebGradients preset gallery" style="width:100%;height:100%;object-fit:cover;">
           </div>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
             <h3 contenteditable="true" style="font-size:18px;font-weight:800;color:#0f172a;margin:0;">WebGradients</h3>
@@ -3850,7 +3494,7 @@
 
         <div style="flex:1 1 0;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;">
           <div style="width:100%;height:112px;border-radius:10px;overflow:hidden;border:1px solid #cbd5e1;background:#ffffff;">
-            <img src="https://learnui.design/tools/img/og-mesh.png" alt="MeshGradient 2D liquid canvas tool" style="width:100%;height:100%;object-fit:cover;">
+            <img src="assets/tools/meshgradient.png" alt="MeshGradient 2D liquid canvas tool" style="width:100%;height:100%;object-fit:cover;">
           </div>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
             <h3 contenteditable="true" style="font-size:18px;font-weight:800;color:#0f172a;margin:0;">MeshGradient</h3>
@@ -3867,7 +3511,7 @@
       <div style="flex:1 1 0;display:flex;gap:18px;align-items:stretch;">
         <div style="flex:1 1 0;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;">
           <div style="width:100%;height:112px;border-radius:10px;overflow:hidden;border:1px solid #cbd5e1;background:#ffffff;">
-            <img src="https://mtsknn.fi/blog/squircley/squircley.png" alt="Squircley superellipse generator" style="width:100%;height:100%;object-fit:cover;">
+            <img src="assets/tools/squircley.png" alt="Squircley superellipse generator" style="width:100%;height:100%;object-fit:cover;">
           </div>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
             <h3 contenteditable="true" style="font-size:18px;font-weight:800;color:#0f172a;margin:0;">Squircley</h3>
@@ -3881,7 +3525,7 @@
 
         <div style="flex:1 1 0;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;">
           <div style="width:100%;height:112px;border-radius:10px;overflow:hidden;border:1px solid #cbd5e1;background:#ffffff;">
-            <img src="https://www.blobmaker.app/static/blobmaker-cover-703617855c36334d464a0690d71f7a75.jpg" alt="Blobmaker organic SVG shape tool" style="width:100%;height:100%;object-fit:cover;">
+            <img src="assets/tools/blobmaker.jpg" alt="Blobmaker organic SVG shape tool" style="width:100%;height:100%;object-fit:cover;">
           </div>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
             <h3 contenteditable="true" style="font-size:18px;font-weight:800;color:#0f172a;margin:0;">Blobmaker</h3>
@@ -3895,7 +3539,7 @@
 
         <div style="flex:1 1 0;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;">
           <div style="width:100%;height:112px;border-radius:10px;overflow:hidden;border:1px solid #cbd5e1;background:#ffffff;">
-            <img src="https://www.bram.us/wordpress/wp-content/uploads/2017/06/css-clip-path-maker.png" alt="Clippy CSS clip-path polygon maker" style="width:100%;height:100%;object-fit:cover;">
+            <img src="assets/tools/clippy.png" alt="Clippy CSS clip-path polygon maker" style="width:100%;height:100%;object-fit:cover;">
           </div>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
             <h3 contenteditable="true" style="font-size:18px;font-weight:800;color:#0f172a;margin:0;">Clippy</h3>
@@ -3908,17 +3552,17 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- SLIDE 30: Closing Cover (Vertically Centered + Digitan Petit Chibi + Ver 1.0) -->
-  <div class="slide-container" id="slide15" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:linear-gradient(135deg, #070b14 0%, #0d1324 60%, #111827 100%);display:flex;align-items:stretch;justify-content:space-between;">
+  <section class="slide" id="slide15" style="width:1280px;height:720px;margin:0 auto;overflow:hidden;box-sizing:border-box;background:linear-gradient(135deg, #070b14 0%, #0d1324 60%, #111827 100%);display:flex;align-items:stretch;justify-content:space-between;">
     <!-- Left Foreground Closing Typography & Footer Metadata -->
     <div style="width:710px;padding:44px 24px 44px 64px;display:flex;flex-direction:column;justify-content:space-between;">
       <div style="flex-grow:1;display:flex;flex-direction:column;justify-content:center;">
         <!-- Digitan Static Petit Chibi Closing Badge (Borderless Transparent PNG) -->
         <div style="display:flex;align-items:center;gap:16px;margin:0 0 22px 0;">
           <div style="width:92px;height:92px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <img src="https://media.gametora.com/umamusume/characters/chibi/101901_0011.png" alt="Digitan petit chibi mascot" style="width:100%;height:100%;object-fit:contain;">
+            <img src="assets/digitan-chibi.png" alt="Digitan petit chibi mascot" style="width:100%;height:100%;object-fit:contain;" data-fallback-src="data:image/png;base64,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" onerror="if(this.dataset.fallbackSrc&amp;&amp;this.src!==this.dataset.fallbackSrc)this.src=this.dataset.fallbackSrc">
           </div>
           <div style="display:flex;flex-direction:column;gap:4px;">
             <p contenteditable="true" style="font-family:'Space Grotesk',sans-serif;font-size:16px;letter-spacing:2.5px;text-transform:uppercase;color:#fde047;font-weight:700;margin:0;">
@@ -3997,784 +3641,6 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Floating Presentation Toolbar -->
-  <div id="deck-hud-zone">
-    <nav id="deck-hud" aria-label="Presentation Toolbar">
-      <button type="button" id="hud-prev" class="hud-btn" title="Previous Slide (←)" aria-label="Previous Slide">
-        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
-        <span class="hud-label">Prev</span>
-      </button>
-      <span id="deck-counter" aria-live="polite">01 / 30</span>
-      <button type="button" id="hud-next" class="hud-btn" title="Next Slide (→)" aria-label="Next Slide">
-        <span class="hud-label">Next</span>
-        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
-      </button>
-      <span class="hud-sep" aria-hidden="true"></span>
-      <button type="button" id="hud-present" class="hud-btn" title="Present Fullscreen (F)" aria-label="Present Fullscreen">
-        <i class="fa-solid fa-play" aria-hidden="true"></i>
-        <span class="hud-label">Present</span>
-      </button>
-      <button type="button" id="hud-mode" class="hud-btn" title="Switch to Scroll All (M)" aria-label="Toggle Scroll All / Single Slide">
-        <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
-        <span class="hud-label">Scroll All</span>
-      </button>
-      <button type="button" id="hud-theme" class="hud-btn" title="Switch to Light Theme (T)" aria-label="Toggle Theme">
-        <i class="fa-solid fa-sun" aria-hidden="true"></i>
-        <span class="hud-label">Light</span>
-      </button>
-      <span class="hud-sep" aria-hidden="true"></span>
-      <button type="button" id="hud-pptx" class="hud-btn hud-btn-pptx" title="Export 16:9 PowerPoint (Digitan_Visual_Guide.pptx)" aria-label="Export PPTX">
-        <i class="fa-solid fa-file-powerpoint" aria-hidden="true"></i>
-        <span class="hud-label">.PPTX</span>
-      </button>
-      <button type="button" id="hud-pdf" class="hud-btn hud-btn-pdf" title="Export PDF" aria-label="Export PDF">
-        <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
-        <span class="hud-label">.PDF</span>
-      </button>
-    </nav>
-  </div>
-
-  <script>
-    (() => {
-      const slides = Array.from(document.querySelectorAll('.slide-container'));
-      if (!slides.length) return;
-
-      let current = 0;
-      let isStage = true;
-      let isLightTheme = false;
-      let isExportingPptx = false;
-      let idleTimer = null;
-      let isHovered = false;
-      let wheelLocked = false;
-      let scrollTicking = false;
-
-      const hudZone = document.getElementById('deck-hud-zone');
-      const hud = document.getElementById('deck-hud');
-      const counterEl = document.getElementById('deck-counter');
-      const prevBtn = document.getElementById('hud-prev');
-      const nextBtn = document.getElementById('hud-next');
-      const presentBtn = document.getElementById('hud-present');
-      const modeBtn = document.getElementById('hud-mode');
-      const themeBtn = document.getElementById('hud-theme');
-      const pptxBtn = document.getElementById('hud-pptx');
-      const pdfBtn = document.getElementById('hud-pdf');
-
-      const pad2 = (n) => String(n).padStart(2, '0');
-
-      // 1. Auto-Fade & Wake Logic (Desktop Hover + Mobile Tap-to-Wake)
-      function scheduleIdle(delay = 2500) {
-        clearTimeout(idleTimer);
-        if (isHovered || isExportingPptx) return;
-        idleTimer = setTimeout(() => {
-          hud.classList.add('hud-idle');
-        }, delay);
-      }
-
-      function wakeHud(delay = 2800) {
-        hud.classList.remove('hud-idle');
-        scheduleIdle(delay);
-      }
-
-      hudZone.addEventListener('mouseenter', () => {
-        isHovered = true;
-        clearTimeout(idleTimer);
-        hud.classList.remove('hud-idle');
-      });
-
-      hudZone.addEventListener('mouseleave', () => {
-        isHovered = false;
-        scheduleIdle(1600);
-      });
-
-      // Mobile / Touch tap-to-wake: first tap reveals hidden HUD without accidentally clicking a button
-      hudZone.addEventListener('click', (e) => {
-        if (hud.classList.contains('hud-idle')) {
-          e.preventDefault();
-          e.stopPropagation();
-          wakeHud(3200);
-          return;
-        }
-        wakeHud(3200);
-      }, true);
-
-      // 2. Slide Scaling, Counter & Navigation
-      function updateCounter(index) {
-        counterEl.textContent = `${pad2(index + 1)} / ${pad2(slides.length)}`;
-        prevBtn.disabled = index <= 0;
-        nextBtn.disabled = index >= slides.length - 1;
-      }
-
-      function scaleActiveSlide() {
-        slides.forEach((s, idx) => {
-          if (!isStage) {
-            s.style.transform = '';
-            return;
-          }
-          if (idx === current) {
-            const scale = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
-            s.style.transform = `translate(-50%, -50%) scale(${scale})`;
-          } else {
-            s.style.transform = '';
-          }
-        });
-      }
-
-      function showSlide(index, updateHash = true) {
-        current = Math.max(0, Math.min(slides.length - 1, index));
-        slides.forEach((s, idx) => s.classList.toggle('active-slide', idx === current));
-        updateCounter(current);
-        scaleActiveSlide();
-        if (!isStage) {
-          slides[current].scrollIntoView({ behavior: 'smooth', block: 'center' });
-        } else if (updateHash) {
-          history.replaceState(null, '', `#slide-${pad2(current + 1)}`);
-        }
-      }
-
-      // 3. Scroll Mode Center-of-Viewport Page Tracking (PC & Mobile)
-      function syncSlideFromScroll() {
-        scrollTicking = false;
-        if (isStage) return;
-
-        const viewportCenter = window.innerHeight / 2;
-        let closestIdx = current;
-        let minDistance = Infinity;
-
-        slides.forEach((slide, idx) => {
-          const rect = slide.getBoundingClientRect();
-          const slideCenter = rect.top + rect.height / 2;
-          const dist = Math.abs(slideCenter - viewportCenter);
-          if (dist < minDistance) {
-            minDistance = dist;
-            closestIdx = idx;
-          }
-        });
-
-        if (closestIdx !== current) {
-          current = closestIdx;
-          slides.forEach((s, idx) => s.classList.toggle('active-slide', idx === current));
-          updateCounter(current);
-          history.replaceState(null, '', `#slide-${pad2(current + 1)}`);
-        }
-      }
-
-      window.addEventListener('scroll', () => {
-        if (isStage || scrollTicking) return;
-        scrollTicking = true;
-        requestAnimationFrame(syncSlideFromScroll);
-      }, { passive: true });
-
-      // 4. Single Slide / Present Mode Mouse Wheel Navigation (360ms debounced)
-      window.addEventListener('wheel', (e) => {
-        if (!isStage) return;
-        if (e.ctrlKey || e.metaKey) return;
-        if (e.target && e.target.isContentEditable) return;
-
-        e.preventDefault();
-        if (wheelLocked || Math.abs(e.deltaY) < 12) return;
-
-        wheelLocked = true;
-        showSlide(e.deltaY > 0 ? current + 1 : current - 1);
-        setTimeout(() => { wheelLocked = false; }, 360);
-      }, { passive: false });
-
-      // 5. Mode, Presentation (Fullscreen), and Theme Toggles
-      function setMode(stageEnabled) {
-        isStage = stageEnabled;
-        document.body.classList.toggle('stage-mode', isStage);
-
-        const icon = modeBtn.querySelector('i');
-        const label = modeBtn.querySelector('.hud-label');
-        if (isStage) {
-          icon.className = 'fa-solid fa-layer-group';
-          label.textContent = 'Scroll All';
-          modeBtn.title = 'Switch to Scroll All (M)';
-          modeBtn.classList.remove('is-active');
-        } else {
-          icon.className = 'fa-solid fa-display';
-          label.textContent = 'Single Slide';
-          modeBtn.title = 'Switch to Single Slide (M)';
-          modeBtn.classList.add('is-active');
-        }
-
-        showSlide(current, false);
-        if (!isStage) {
-          requestAnimationFrame(syncSlideFromScroll);
-        }
-      }
-
-      function updatePresentButton() {
-        const isFs = Boolean(document.fullscreenElement);
-        const icon = presentBtn.querySelector('i');
-        const label = presentBtn.querySelector('.hud-label');
-        if (isFs) {
-          icon.className = 'fa-solid fa-compress';
-          label.textContent = 'Exit';
-          presentBtn.title = 'Exit Presentation (F / Esc)';
-          presentBtn.classList.add('is-active');
-        } else {
-          icon.className = 'fa-solid fa-play';
-          label.textContent = 'Present';
-          presentBtn.title = 'Present Fullscreen (F)';
-          presentBtn.classList.remove('is-active');
-        }
-      }
-
-      function togglePresentation() {
-        if (!document.fullscreenElement) {
-          if (!isStage) setMode(true);
-          if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen().catch(() => {});
-          }
-        } else if (document.exitFullscreen) {
-          document.exitFullscreen().catch(() => {});
-        }
-      }
-
-      document.addEventListener('fullscreenchange', updatePresentButton);
-
-      function applyTheme(lightEnabled, persist = true) {
-        isLightTheme = Boolean(lightEnabled);
-        document.body.classList.toggle('theme-light', isLightTheme);
-
-        const icon = themeBtn.querySelector('i');
-        const label = themeBtn.querySelector('.hud-label');
-        if (isLightTheme) {
-          icon.className = 'fa-solid fa-moon';
-          label.textContent = 'Dark';
-          themeBtn.title = 'Switch to Dark Theme (T)';
-          themeBtn.classList.add('is-active');
-        } else {
-          icon.className = 'fa-solid fa-sun';
-          label.textContent = 'Light';
-          themeBtn.title = 'Switch to Light Theme (T)';
-          themeBtn.classList.remove('is-active');
-        }
-
-        if (persist) {
-          try {
-            localStorage.setItem('digitan-deck-theme', isLightTheme ? 'light' : 'dark');
-          } catch (_) {}
-        }
-      }
-
-      // 6. Export .PDF (Downloads latest GitHub Actions exports/Digitan-Guide-*.pdf, or falls back to window.print())
-      async function saveAsPdf() {
-        const label = pdfBtn.querySelector('.hud-label');
-        const originalLabel = label.textContent;
-        label.textContent = 'PDF...';
-        try {
-          if (window.location.hostname.endsWith('github.io')) {
-            const owner = window.location.hostname.split('.')[0];
-            const repo = window.location.pathname.split('/').filter(Boolean)[0];
-            if (owner && repo) {
-              const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/exports`);
-              if (res.ok) {
-                const files = await res.json();
-                const pdfs = Array.isArray(files)
-                  ? files
-                      .filter((f) => f.name && f.name.endsWith('.pdf'))
-                      .sort((a, b) => {
-                        const aMatch = a.name.startsWith('Digitan-Guide-') ? 1 : 0;
-                        const bMatch = b.name.startsWith('Digitan-Guide-') ? 1 : 0;
-                        if (aMatch !== bMatch) return bMatch - aMatch;
-                        return b.name.localeCompare(a.name);
-                      })
-                  : [];
-                if (pdfs.length > 0) {
-                  const link = document.createElement('a');
-                  link.href = `./exports/${pdfs[0].name}`;
-                  link.download = pdfs[0].name;
-                  document.body.appendChild(link);
-                  link.click();
-                  link.remove();
-                  label.textContent = originalLabel;
-                  return;
-                }
-              }
-            }
-          }
-        } catch (_) {}
-        label.textContent = originalLabel;
-        window.print();
-      }
-
-      // 7. Export .PPTX (16:9 Widescreen Deck via PptxGenJS CDN -> Digitan_Visual_Guide.pptx)
-      const PPTX_CDNS = [
-        'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js',
-        'https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs/dist/pptxgen.bundle.js',
-        'https://unpkg.com/pptxgenjs@3.12.0/dist/pptxgen.bundle.js'
-      ];
-
-      function loadScript(src) {
-        return new Promise((resolve, reject) => {
-          const s = document.createElement('script');
-          s.src = src;
-          s.async = true;
-          s.onload = () => resolve();
-          s.onerror = () => reject(new Error(`Failed to load ${src}`));
-          document.head.appendChild(s);
-        });
-      }
-
-      async function ensurePptxGen() {
-        if (typeof window.PptxGenJS === 'function') return window.PptxGenJS;
-        for (const url of PPTX_CDNS) {
-          try {
-            await loadScript(url);
-            if (typeof window.PptxGenJS === 'function') return window.PptxGenJS;
-          } catch (_) {}
-        }
-        throw new Error('PptxGenJS CDN could not be loaded.');
-      }
-
-      function parseCssColor(colorStr) {
-        if (!colorStr || colorStr === 'transparent' || colorStr === 'none') return null;
-        const rgba = colorStr.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)(?:\s*,\s*([\d.]+))?\s*\)/i);
-        if (rgba) {
-          const r = Math.min(255, Math.max(0, Math.round(Number(rgba[1]))));
-          const g = Math.min(255, Math.max(0, Math.round(Number(rgba[2]))));
-          const b = Math.min(255, Math.max(0, Math.round(Number(rgba[3]))));
-          const a = rgba[4] !== undefined ? Math.min(1, Math.max(0, Number(rgba[4]))) : 1;
-          const hex = [r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('').toUpperCase();
-          return { hex, alpha: a };
-        }
-        const hexMatch = colorStr.trim().match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
-        if (hexMatch) {
-          let h = hexMatch[1];
-          if (h.length === 3) h = h.split('').map((c) => c + c).join('');
-          return { hex: h.toUpperCase(), alpha: 1 };
-        }
-        return null;
-      }
-
-      function extractGradientColor(bgImage) {
-        if (!bgImage || bgImage === 'none') return null;
-        const match = bgImage.match(/rgba?\([^)]+\)|#[0-9a-f]{3,6}/i);
-        return match ? parseCssColor(match[0]) : null;
-      }
-
-      function extractPrimaryFont(fontFamily) {
-        if (!fontFamily) return 'Plus Jakarta Sans';
-        const first = fontFamily.split(',')[0].replace(/['"]/g, '').trim();
-        return first || 'Plus Jakarta Sans';
-      }
-
-      async function svgToPngDataUrl(svgEl, widthPx, heightPx) {
-        try {
-          const clone = svgEl.cloneNode(true);
-          clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-          const w = Math.max(16, Math.round(widthPx));
-          const h = Math.max(16, Math.round(heightPx));
-          clone.setAttribute('width', String(w));
-          clone.setAttribute('height', String(h));
-          const svgString = new XMLSerializer().serializeToString(clone);
-          const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-          const url = URL.createObjectURL(blob);
-          try {
-            const img = new Image();
-            await new Promise((resolve, reject) => {
-              img.onload = resolve;
-              img.onerror = reject;
-              img.src = url;
-            });
-            const scale = 2;
-            const canvas = document.createElement('canvas');
-            canvas.width = w * scale;
-            canvas.height = h * scale;
-            const ctx = canvas.getContext('2d');
-            ctx.scale(scale, scale);
-            ctx.drawImage(img, 0, 0, w, h);
-            return canvas.toDataURL('image/png');
-          } finally {
-            URL.revokeObjectURL(url);
-          }
-        } catch (_) {
-          return null;
-        }
-      }
-
-      function imgToPngDataUrl(imgEl) {
-        try {
-          if (!imgEl.complete || !imgEl.naturalWidth) return null;
-          const canvas = document.createElement('canvas');
-          canvas.width = imgEl.naturalWidth;
-          canvas.height = imgEl.naturalHeight;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(imgEl, 0, 0);
-          return canvas.toDataURL('image/png');
-        } catch (_) {
-          return null;
-        }
-      }
-
-      function hasBoxVisual(cs) {
-        const bg = parseCssColor(cs.backgroundColor);
-        const hasBg = (bg && bg.alpha > 0.03) || (cs.backgroundImage && cs.backgroundImage !== 'none');
-        const borders = [
-          { w: parseFloat(cs.borderTopWidth) || 0, c: parseCssColor(cs.borderTopColor) },
-          { w: parseFloat(cs.borderRightWidth) || 0, c: parseCssColor(cs.borderRightColor) },
-          { w: parseFloat(cs.borderBottomWidth) || 0, c: parseCssColor(cs.borderBottomColor) },
-          { w: parseFloat(cs.borderLeftWidth) || 0, c: parseCssColor(cs.borderLeftColor) }
-        ];
-        const hasBorder = borders.some((b) => b.w >= 0.5 && b.c && b.c.alpha > 0.05);
-        return hasBg || hasBorder;
-      }
-
-      function getBorderSpec(cs) {
-        const sides = [
-          { w: parseFloat(cs.borderTopWidth) || 0, c: parseCssColor(cs.borderTopColor) },
-          { w: parseFloat(cs.borderRightWidth) || 0, c: parseCssColor(cs.borderRightColor) },
-          { w: parseFloat(cs.borderBottomWidth) || 0, c: parseCssColor(cs.borderBottomColor) },
-          { w: parseFloat(cs.borderLeftWidth) || 0, c: parseCssColor(cs.borderLeftColor) }
-        ].filter((s) => s.w >= 0.5 && s.c && s.c.alpha > 0.05);
-        if (!sides.length) return null;
-        sides.sort((a, b) => b.w - a.w);
-        return {
-          color: sides[0].c.hex,
-          pt: Math.max(0.5, Math.round(sides[0].w * 0.75 * 10) / 10),
-          transparency: Math.round((1 - sides[0].c.alpha) * 100)
-        };
-      }
-
-      const INLINE_TAGS = new Set(['SPAN', 'STRONG', 'B', 'EM', 'I', 'U', 'A', 'CODE', 'BR', 'SMALL', 'SUB', 'SUP']);
-
-      function canEmitAsSingleTextBlock(el) {
-        if (!el.children.length) return true;
-        for (const child of el.children) {
-          if (!INLINE_TAGS.has(child.tagName)) return false;
-          if (child.tagName !== 'BR' && child.tagName !== 'I') {
-            const ccs = getComputedStyle(child);
-            if (hasBoxVisual(ccs)) return false;
-          }
-        }
-        return true;
-      }
-
-      function collectInlineRuns(el, inheritedCs) {
-        const runs = [];
-        for (const node of el.childNodes) {
-          if (node.nodeType === Node.TEXT_NODE) {
-            const text = node.textContent.replace(/\s+/g, ' ');
-            if (!text.trim() && !runs.length) continue;
-            const c = parseCssColor(inheritedCs.color);
-            const weight = parseInt(inheritedCs.fontWeight, 10);
-            runs.push({
-              text,
-              options: {
-                fontFace: extractPrimaryFont(inheritedCs.fontFamily),
-                fontSize: Math.max(7, Math.round(parseFloat(inheritedCs.fontSize) * 0.75 * 10) / 10),
-                color: c ? c.hex : '0F172A',
-                bold: (!Number.isNaN(weight) && weight >= 600) || inheritedCs.fontWeight === 'bold',
-                italic: inheritedCs.fontStyle === 'italic'
-              }
-            });
-          } else if (node.nodeType === Node.ELEMENT_NODE) {
-            if (node.tagName === 'BR') {
-              runs.push({ text: '\n', options: {} });
-            } else if (node.tagName === 'I' && node.className && node.className.includes('fa-')) {
-              continue;
-            } else {
-              runs.push(...collectInlineRuns(node, getComputedStyle(node)));
-            }
-          }
-        }
-        if (runs.length) {
-          runs[0].text = runs[0].text.replace(/^\s+/, '');
-          runs[runs.length - 1].text = runs[runs.length - 1].text.replace(/\s+$/, '');
-        }
-        return runs.filter((r) => r.text.length > 0);
-      }
-
-      async function exportPptx() {
-        if (isExportingPptx) return;
-        isExportingPptx = true;
-        pptxBtn.disabled = true;
-        const label = pptxBtn.querySelector('.hud-label');
-        const originalLabel = label.textContent;
-        label.textContent = 'Loading...';
-
-        let measureHost = null;
-        try {
-          const PptxGen = await ensurePptxGen();
-          const pptx = new PptxGen();
-          pptx.defineLayout({ name: 'DIGITAN_16_9', width: 13.333333, height: 7.5 });
-          pptx.layout = 'DIGITAN_16_9';
-          pptx.title = 'Digitan’s Guide to Luminous Gradients & Architectural Shapes';
-          pptx.author = 'Digitan';
-
-          measureHost = document.createElement('div');
-          measureHost.id = 'pptx-measure-host';
-          document.body.appendChild(measureHost);
-
-          const PX_TO_IN = 1 / 96;
-
-          for (let i = 0; i < slides.length; i++) {
-            label.textContent = `${pad2(i + 1)}/${pad2(slides.length)}`;
-            measureHost.innerHTML = '';
-            const clone = slides[i].cloneNode(true);
-            clone.classList.add('active-slide');
-            clone.style.transform = '';
-            measureHost.appendChild(clone);
-
-            const slideRect = clone.getBoundingClientRect();
-            const slideCs = getComputedStyle(clone);
-            const slideBg = parseCssColor(slideCs.backgroundColor);
-            const slideGrad = extractGradientColor(slideCs.backgroundImage);
-            const pSlide = pptx.addSlide();
-            pSlide.background = {
-              color: (slideBg && slideBg.alpha > 0.05) ? slideBg.hex : (slideGrad ? slideGrad.hex : 'FFFFFF')
-            };
-
-            const walkNode = async (el) => {
-              if (!el || el.nodeType !== Node.ELEMENT_NODE) return;
-              const cs = getComputedStyle(el);
-              if (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) <= 0.02) return;
-
-              const rect = el.getBoundingClientRect();
-              const relX = rect.left - slideRect.left;
-              const relY = rect.top - slideRect.top;
-              const isRoot = el === clone;
-
-              if (!isRoot && (rect.width < 1 || rect.height < 1)) return;
-              if (!isRoot && (relX + rect.width <= 0 || relY + rect.height <= 0 || relX >= 1280 || relY >= 720)) return;
-
-              const boxX = Math.max(0, relX) * PX_TO_IN;
-              const boxY = Math.max(0, relY) * PX_TO_IN;
-              const boxW = Math.min(1280 - Math.max(0, relX), rect.width - Math.max(0, -relX)) * PX_TO_IN;
-              const boxH = Math.min(720 - Math.max(0, relY), rect.height - Math.max(0, -relY)) * PX_TO_IN;
-              if (!isRoot && (boxW <= 0.01 || boxH <= 0.01)) return;
-
-              // Skip FontAwesome glyph elements cleanly
-              if (el.tagName === 'I' && el.className && el.className.includes('fa-')) return;
-
-              // Rasterize inline SVG diagrams/charts
-              if (el.tagName && el.tagName.toLowerCase() === 'svg') {
-                const png = await svgToPngDataUrl(el, rect.width, rect.height);
-                if (png) {
-                  pSlide.addImage({
-                    data: png,
-                    x: relX * PX_TO_IN,
-                    y: relY * PX_TO_IN,
-                    w: rect.width * PX_TO_IN,
-                    h: rect.height * PX_TO_IN
-                  });
-                }
-                return;
-              }
-
-              // Embed images (gracefully handle cross-origin images without CORS)
-              if (el.tagName === 'IMG') {
-                const png = imgToPngDataUrl(el);
-                if (png) {
-                  pSlide.addImage({
-                    data: png,
-                    x: boxX,
-                    y: boxY,
-                    w: boxW,
-                    h: boxH,
-                    sizing: { type: 'contain', w: boxW, h: boxH }
-                  });
-                } else {
-                  pSlide.addShape(pptx.ShapeType.roundRect, {
-                    x: boxX,
-                    y: boxY,
-                    w: boxW,
-                    h: boxH,
-                    rectRadius: 0.08,
-                    fill: { color: '1E293B', transparency: 15 },
-                    line: { color: '475569', width: 0.75 }
-                  });
-                }
-                return;
-              }
-
-              // Draw container / card / badge shape
-              if (!isRoot && hasBoxVisual(cs)) {
-                const bg = parseCssColor(cs.backgroundColor);
-                const grad = extractGradientColor(cs.backgroundImage);
-                const fillCol = (bg && bg.alpha > 0.03) ? bg : grad;
-                const border = getBorderSpec(cs);
-                const radiusPx = parseFloat(cs.borderTopLeftRadius) || 0;
-                const minSide = Math.min(rect.width, rect.height);
-                const isCircle = radiusPx >= minSide * 0.45 && Math.abs(rect.width - rect.height) < 6;
-                const shapeType = isCircle
-                  ? pptx.ShapeType.ellipse
-                  : (radiusPx > 1 ? pptx.ShapeType.roundRect : pptx.ShapeType.rect);
-
-                const shapeOpts = { x: boxX, y: boxY, w: boxW, h: boxH };
-                if (shapeType === pptx.ShapeType.roundRect) {
-                  shapeOpts.rectRadius = Math.min(0.5, Math.round((radiusPx / Math.max(1, minSide)) * 100) / 100);
-                }
-                if (fillCol) {
-                  const elemOpacity = parseFloat(cs.opacity);
-                  const effAlpha = fillCol.alpha * (Number.isNaN(elemOpacity) ? 1 : elemOpacity);
-                  shapeOpts.fill = {
-                    color: fillCol.hex,
-                    transparency: Math.min(98, Math.max(0, Math.round((1 - effAlpha) * 100)))
-                  };
-                }
-                if (border) {
-                  shapeOpts.line = {
-                    color: border.color,
-                    width: border.pt,
-                    transparency: border.transparency
-                  };
-                }
-                pSlide.addShape(shapeType, shapeOpts);
-              }
-
-              // Emit text or recurse into child elements
-              const hasDirectText = Array.from(el.childNodes).some(
-                (n) => n.nodeType === Node.TEXT_NODE && n.textContent.trim().length > 0
-              );
-              if (el.children.length === 0 || (canEmitAsSingleTextBlock(el) && (hasDirectText || el.innerText.trim().length > 0))) {
-                const runs = collectInlineRuns(el, cs);
-                if (runs.length) {
-                  const padL = parseFloat(cs.paddingLeft) || 0;
-                  const padR = parseFloat(cs.paddingRight) || 0;
-                  const padT = parseFloat(cs.paddingTop) || 0;
-                  const padB = parseFloat(cs.paddingBottom) || 0;
-                  const tx = Math.max(0, relX + padL) * PX_TO_IN;
-                  const ty = Math.max(0, relY + padT) * PX_TO_IN;
-                  const tw = Math.max(0.25, (rect.width - padL - padR) * PX_TO_IN + 0.06);
-                  const th = Math.max(0.16, (rect.height - padT - padB) * PX_TO_IN + 0.04);
-                  const align = cs.textAlign === 'center' ? 'center' : cs.textAlign === 'right' ? 'right' : 'left';
-                  pSlide.addText(runs, {
-                    x: tx,
-                    y: ty,
-                    w: Math.min(13.333333 - tx, tw),
-                    h: Math.min(7.5 - ty, th),
-                    align,
-                    valign: 'top',
-                    margin: 0,
-                    wrap: true
-                  });
-                }
-                return;
-              }
-
-              // Mixed container (e.g. cover headline with inline badge pill + text nodes)
-              for (const child of el.childNodes) {
-                if (child.nodeType === Node.TEXT_NODE) {
-                  const txt = child.textContent.replace(/\s+/g, ' ').trim();
-                  if (!txt) continue;
-                  const range = document.createRange();
-                  range.selectNodeContents(child);
-                  const r = range.getBoundingClientRect();
-                  if (r.width < 1 || r.height < 1) continue;
-                  const c = parseCssColor(cs.color);
-                  const weight = parseInt(cs.fontWeight, 10);
-                  pSlide.addText(txt, {
-                    x: Math.max(0, r.left - slideRect.left) * PX_TO_IN,
-                    y: Math.max(0, r.top - slideRect.top) * PX_TO_IN,
-                    w: Math.min(13.333333, r.width * PX_TO_IN + 0.08),
-                    h: Math.min(7.5, r.height * PX_TO_IN + 0.04),
-                    fontFace: extractPrimaryFont(cs.fontFamily),
-                    fontSize: Math.max(7, Math.round(parseFloat(cs.fontSize) * 0.75 * 10) / 10),
-                    color: c ? c.hex : '0F172A',
-                    bold: (!Number.isNaN(weight) && weight >= 600) || cs.fontWeight === 'bold',
-                    italic: cs.fontStyle === 'italic',
-                    valign: 'top',
-                    margin: 0
-                  });
-                } else if (child.nodeType === Node.ELEMENT_NODE) {
-                  await walkNode(child);
-                }
-              }
-            };
-
-            await walkNode(clone);
-          }
-
-          label.textContent = 'Saving...';
-          await pptx.writeFile({ fileName: 'Digitan_Visual_Guide.pptx' });
-        } catch (err) {
-          console.error('PPTX export error:', err);
-          alert('Unable to export .PPTX right now. Please check your network connection for PptxGenJS CDN.');
-        } finally {
-          if (measureHost && measureHost.parentNode) measureHost.remove();
-          isExportingPptx = false;
-          pptxBtn.disabled = false;
-          label.textContent = originalLabel;
-          scheduleIdle(2500);
-        }
-      }
-
-      // 8. Button & Keyboard Listeners
-      prevBtn.addEventListener('click', () => showSlide(current - 1));
-      nextBtn.addEventListener('click', () => showSlide(current + 1));
-      presentBtn.addEventListener('click', togglePresentation);
-      modeBtn.addEventListener('click', () => setMode(!isStage));
-      themeBtn.addEventListener('click', () => applyTheme(!isLightTheme));
-      pptxBtn.addEventListener('click', exportPptx);
-      pdfBtn.addEventListener('click', saveAsPdf);
-
-      window.addEventListener('keydown', (e) => {
-        if (e.target && e.target.isContentEditable) return;
-        if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(e.key)) {
-          if (isStage || e.key === 'ArrowRight') {
-            e.preventDefault();
-            showSlide(current + 1);
-          }
-        } else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) {
-          if (isStage || e.key === 'ArrowLeft') {
-            e.preventDefault();
-            showSlide(current - 1);
-          }
-        } else if (e.key === 'Home') {
-          e.preventDefault();
-          showSlide(0);
-        } else if (e.key === 'End') {
-          e.preventDefault();
-          showSlide(slides.length - 1);
-        } else if (e.key === 'f' || e.key === 'F') {
-          e.preventDefault();
-          togglePresentation();
-        } else if (e.key === 'm' || e.key === 'M') {
-          e.preventDefault();
-          setMode(!isStage);
-        } else if (e.key === 't' || e.key === 'T') {
-          e.preventDefault();
-          applyTheme(!isLightTheme);
-        }
-      });
-
-      // Touch Swipe Navigation in Single Slide / Present Mode
-      let touchStartX = 0;
-      window.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-      }, { passive: true });
-
-      window.addEventListener('touchend', (e) => {
-        if (!isStage) return;
-        const deltaX = e.changedTouches[0].screenX - touchStartX;
-        if (Math.abs(deltaX) > 45) {
-          showSlide(deltaX < 0 ? current + 1 : current - 1);
-        }
-      }, { passive: true });
-
-      window.addEventListener('resize', scaleActiveSlide);
-
-      // Initialize Theme, URL Hash, Mode & Auto-Hide
-      try {
-        const savedTheme = localStorage.getItem('digitan-deck-theme');
-        applyTheme(savedTheme === 'light', false);
-      } catch (_) {
-        applyTheme(false, false);
-      }
-
-      const hashMatch = window.location.hash.match(/^#slide-(\d+)$/);
-      if (hashMatch) {
-        const target = parseInt(hashMatch[1], 10) - 1;
-        if (target >= 0 && target < slides.length) current = target;
-      }
-
-      updatePresentButton();
-      setMode(true);
-      scheduleIdle(2500);
-    })();
-  </script>
-</body></html>
+  </section>
+</body>
+</html>
